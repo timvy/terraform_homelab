@@ -54,7 +54,7 @@ provider "pihole" {
 
 provider "docker" {
   alias    = "lxc-docker3"
-  host     = "ssh://root@lxc-docker3.internal:22"
+  host     = "ssh://ansible@lxc-docker3.internal:22"
   ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes"]
 }
 
