@@ -40,15 +40,15 @@ locals {
     }
   }
   repositories = {
-    terraform_homelab = {
-      url = "git@github.com:timvy/terraform_homelab.git"
-    },
-    ansible_inventory_homelab = {
-      url = "git@github.com:timvy/ansible_inventory_homelab.git"
-    }
     ansible_collection_homelab = {
       url = "git@github.com:timvy/ansible_collection_homelab.git"
     }
+    ansible_inventory_homelab = {
+      url = "git@github.com:timvy/ansible_inventory_homelab.git"
+    }
+    terraform_homelab = {
+      url = "git@github.com:timvy/terraform_homelab.git"
+    },
   }
   inventories = {
     ansible_inventory_proxmox = {
