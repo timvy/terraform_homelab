@@ -19,7 +19,7 @@ terraform {
   backend "s3" {
     bucket                      = "tofu-backend"
     # Semaphore puts the state file in environment subfolders /env:/docker
-    # key                         = "homelab/docker/terraform.tfstate"
+    # key                         = "env:/docker/terraform.tfstate"
     key                         = "terraform.tfstate"
     region                      = "main" # this is required, but will be skipped!
     skip_credentials_validation = true   # this will skip AWS related validation
