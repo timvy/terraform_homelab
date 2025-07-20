@@ -35,5 +35,5 @@ resource "bitwarden_secret" "privkey" {
 resource "bitwarden_secret" "fullchain" {
   key = "certificate_${var.common_name}_fullchain"
   value = acme_certificate.this.private_key_pem
-  folder_id = ${acme_certificate.this.certificate_pem}${acme_certificate.this.issuer_pem}
+  folder_id = "${acme_certificate.this.certificate_pem}${acme_certificate.this.issuer_pem}"
 }
