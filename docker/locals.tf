@@ -13,17 +13,17 @@ locals {
   }
 
   secrets_lxc-docker3 = {
-    firefly_db_root_pwd   = {}
-    firefly_db_pwd        = {}
-    firefly_app_key       = {}
-    wallabag_env_secret   = {}
-    samba_user_tim        = {
-      length  = 32
+    firefly_db_root_pwd = {}
+    firefly_db_pwd      = {}
+    firefly_app_key     = {}
+    wallabag_env_secret = {}
+    samba_user_tim = {
+      length = 32
     }
-    samba_user_hassio     = {
-      length  = 32
+    samba_user_hassio = {
+      length = 32
     }
-    traefik_admin_user     = {}
+    traefik_admin_user = {}
   }
 
   docker_container_lxc-docker3 = {
@@ -372,8 +372,8 @@ locals {
       }
     }
     samba = {
-      image   = "dperson/samba:latest"
-      network = [docker_network.lxc-docker3["samba"].name]
+      image                  = "dperson/samba:latest"
+      network                = [docker_network.lxc-docker3["samba"].name]
       docker_traefik_enabled = false
       env = [
         "TZ=Europe/Brussels",
@@ -397,7 +397,7 @@ locals {
           external = 445
           protocol = "tcp"
         }
-      }     
+      }
       mounts = {
         downloads = {
           source = "/media/downloads"
@@ -422,7 +422,7 @@ locals {
       }
     }
     traefik = {
-      image   = "traefik:latest"
+      image = "traefik:latest"
       network = [
         docker_network.lxc-docker3["traefik"].name,
         docker_network.lxc-docker3["download"].name,
@@ -448,9 +448,9 @@ locals {
       }
       mounts = {
         docker_sock = {
-          source = "/var/run/docker.sock"
-          target = "/var/run/docker.sock"
-          type   = "bind"
+          source    = "/var/run/docker.sock"
+          target    = "/var/run/docker.sock"
+          type      = "bind"
           read_only = true
         }
       }
@@ -468,7 +468,7 @@ locals {
           }
         }
       )
-      labels = { 
+      labels = {
         admin-auth = {
           label = "traefik.http.middlewares.admin-auth.basicauth.users"
           value = "admin:${bcrypt(random_password.this["traefik_admin_user"].result)}"

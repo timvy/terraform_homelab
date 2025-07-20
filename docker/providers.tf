@@ -3,10 +3,6 @@ terraform {
     bitwarden = {
       source = "maxlaverse/bitwarden"
     }
-    zfs = {
-      source  = "MathiasPius/zfs"
-      version = "=0.4.0"
-    }
     docker = {
       source = "kreuzwerker/docker"
     }
@@ -33,16 +29,6 @@ terraform {
 provider "random" {}
 
 provider "bitwarden" {}
-
-data "bitwarden_item_login" "proxmox" {
-  search = "proxmox_login"
-}
-
-provider "zfs" {
-  user     = data.bitwarden_item_login.proxmox.username
-  host     = data.bitwarden_item_login.proxmox.notes
-  password = data.bitwarden_item_login.proxmox.password
-}
 
 data "bitwarden_item_login" "pihole" {
   search = "pihole"
