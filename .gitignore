@@ -1,0 +1,11 @@
+# Terraform / OpenTofu
+*.tfstate
+*.tfstate.*
+.crash
+*.log
+*.tfplan
+.terraform/
+.terraform.lock.hcl
+
+# Bitwarden cache
+.bitwarden

@@ -1,0 +1,27 @@
+---
+tls:
+  certificates:
+    - certFile: /etc/traefik/ssl/home.fullchain.pem
+      keyFile: /etc/traefik/ssl/home.privkey.pem
+    - certFile: /etc/traefik/ssl/ts.fullchain.pem
+      keyFile: /etc/traefik/ssl/ts.privkey.pem
+
+http:
+  # Add the router
+  routers:
+    nextcloud:
+      entryPoints:
+      - https
+      tls: {}
+      # middlewares:
+      # - my-basic-auth
+      service: nextcloud
+      rule:  Host(`cloud.internal`)
+
+  # Add the service
+  services:
+    nextcloud:
+      loadBalancer:
+        servers:
+        - url: http://192.168.6.17
+        # passHostHeader: false
