@@ -1,16 +1,13 @@
 locals {
   bitwarden_secrets = [
     {
-      key = "ssh_semaphore_homelab"
+      key = "bitwarden_client_id"
     },
     {
-      key = "ssh_semaphore_github"
+      key = "bitwarden_client_secret"
     },
     {
-      key = "proxmox_api_user"
-    },
-    {
-      key = "proxmox_api_password"
+      key = "bitwarden_password"
     },
     {
       key = "minio_s3_url"
@@ -22,13 +19,16 @@ locals {
       key = "minio_tf_secret"
     },
     {
-      key = "bitwarden_client_id"
+      key = "proxmox_api_password"
     },
     {
-      key = "bitwarden_client_secret"
+      key = "proxmox_api_user"
     },
     {
-      key = "bitwarden_password"
+      key = "ssh_semaphore_github"
+    },
+    {
+      key = "ssh_semaphore_homelab"
     }
   ]
   project_keys = {
