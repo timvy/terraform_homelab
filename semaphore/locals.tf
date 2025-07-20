@@ -1,6 +1,9 @@
 locals {
   bitwarden_secrets = [
     {
+      key = "bitwarden_auth_token"
+    },
+    {
       key = "bitwarden_client_id"
     },
     {
@@ -64,6 +67,12 @@ locals {
         workspace = "docker"
       }
     }
+    terraform_certs = {
+      name = "Certificates"
+      terraform_workspace = {
+        workspace = "certs"
+      }
+    }
   }
   environments = {
     proxmox = {
@@ -120,6 +129,29 @@ locals {
         }
       ]
     }
+    terraform_homelab_bw = {
+      name        = "Terraform Homelab with Bitwarden Secrets"
+      variables   = {}
+      environment = {}
+      secrets = [{
+        name  = "AWS_ACCESS_KEY_ID"
+        value = data.bitwarden_secret.secret["minio_tf_access_key"].value
+        type  = "env"
+        }, {
+        name  = "AWS_SECRET_ACCESS_KEY"
+        value = data.bitwarden_secret.secret["minio_tf_secret"].value
+        type  = "env"
+        }, {
+        name  = "AWS_ENDPOINT_URL_S3"
+        value = data.bitwarden_secret.secret["minio_s3_url"].value
+        type  = "env"
+        }, {
+        name  = "BWS_ACCESS_TOKEN"
+        value = data.bitwarden_secret.secret["bitwarden_auth_token"].value
+        type  = "env"
+        }
+      ]
+    }
   }
   templates = {
     docker = {
@@ -130,6 +162,18 @@ locals {
       repository  = "terraform_homelab"
       inventory   = "terraform_docker"
       environment = "terraform_homelab"
+      arguments = [
+        "-parallelism=1"
+      ]
+    }
+    terraform_certificates = {
+      name        = "terraform_certificates"
+      description = "Terraform tasks for the certificates homelab project"
+      app         = "tofu"
+      playbook    = "certs"
+      repository  = "terraform_homelab"
+      inventory   = "terraform_certs"
+      environment = "terraform_homelab_bw"
       arguments = [
         "-parallelism=1"
       ]
