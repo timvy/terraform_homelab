@@ -18,7 +18,7 @@ terraform {
 }
 
 provider "bitwarden" {
-    experimental {
+  experimental {
     embedded_client = true
   }
 }
