@@ -1,5 +1,5 @@
 data "bitwarden_secret" "domain_home" {
-  search = "domain_home"
+  key = "domain_home"
 }
 
 locals {
@@ -15,7 +15,7 @@ locals {
 }
 
 data "bitwarden_secret" "letsencrypt_email" {
-  search = "letsencrypt_email"
+  key = "letsencrypt_email"
 }
 
 module "certificates" {
