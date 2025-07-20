@@ -55,7 +55,7 @@ provider "pihole" {
 provider "docker" {
   alias    = "lxc-docker3"
   host     = "ssh://ansible@lxc-docker3.internal:22"
-  ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes"]
+  ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no", "-o", "IdentityFile=~/.ssh/semaphore_homelab.key"]
 }
 
 data "bitwarden_item_login" "tailscale_api_key" {
