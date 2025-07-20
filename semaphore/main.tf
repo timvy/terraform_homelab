@@ -4,10 +4,6 @@ resource "semaphoreui_project" "homelab" {
   max_parallel_tasks = 0
 }
 
-data "bitwarden_secret" "ssh_semaphore_github" {
-  key = "ssh_semaphore_github"
-}
-
 data "bitwarden_secret" "secret" {
   for_each = { for secret in local.bitwarden_secrets : secret.key => secret }
 
