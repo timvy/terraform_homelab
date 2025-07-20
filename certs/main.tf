@@ -1,4 +1,9 @@
+data "bitwarden_secret" "domain_home" {
+  search = "domain_home"
+}
+
 locals {
+  domain_home = data.bitwarden_secret.secret["domain_home"].value
   domains = {
     home = {
       common_name = "*.${local.domain_home}"
@@ -9,8 +14,8 @@ locals {
   }
 }
 
-data "bitwarden_item_secure_note" "letsencrypt" {
-  search = "certbot_letsencrypt"
+data "bitwarden_secret" "letsencrypt_email" {
+  search = "letsencrypt_email"
 }
 
 module "certificates" {
