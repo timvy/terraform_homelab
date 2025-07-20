@@ -28,7 +28,11 @@ terraform {
 
 provider "random" {}
 
-provider "bitwarden" {}
+provider "bitwarden" {
+  experimental {
+    embedded_client = true
+  }
+}
 
 data "bitwarden_item_login" "pihole" {
   search = "pihole"
