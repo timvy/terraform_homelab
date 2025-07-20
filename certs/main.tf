@@ -3,7 +3,7 @@ data "bitwarden_secret" "domain_home" {
 }
 
 locals {
-  domain_home = data.bitwarden_secret.secret["domain_home"].value
+  domain_home = data.bitwarden_secret.domain_home.value
   domains = {
     home = {
       common_name = "*.${local.domain_home}"
@@ -25,5 +25,5 @@ module "certificates" {
 
   name        = each.key
   common_name = each.value.common_name
-  email_address = data.bitwarden_secret.secret["letsencrypt_email"].value
+  email_address = data.bitwarden_secret.letsencrypt_email.value
 }

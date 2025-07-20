@@ -22,4 +22,8 @@ provider "acme" {
   server_url = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
-provider "bitwarden" {}
+provider "bitwarden" {
+  experimental {
+    embedded_client = true
+  }
+}
