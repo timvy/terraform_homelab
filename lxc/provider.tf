@@ -50,7 +50,7 @@ provider "proxmox" {}
 provider "zfs" {
   user     = "ansible"
   host     = "pve-hpe.${local.domain_tailscale}"
-  key  = "~/.ssh/semaphore_homelab.key"
+  key  = "/config/semaphore/.ssh/semaphore_homelab.key"
 }
 
 provider "splunk" {}
