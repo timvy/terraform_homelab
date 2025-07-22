@@ -25,6 +25,9 @@ locals {
       key = "proxmox_api_password"
     },
     {
+      key = "proxmox_api_url"
+    },
+    {
       key = "proxmox_api_user"
     },
     {
@@ -32,7 +35,22 @@ locals {
     },
     {
       key = "ssh_semaphore_homelab"
-    }
+    },
+    {
+      key = "splunk_url"
+    },
+    {
+      key = "splunk_api_password"
+    },
+    {
+      key = "splunk_api_user"
+    },
+    {
+      key = "tailscale_api_key"
+    },
+    {
+      key = "tailscale_tailnet"
+    },
   ]
   project_keys = {
     semaphore_github = {
@@ -71,6 +89,12 @@ locals {
       name = "Certificates"
       terraform_workspace = {
         workspace = "certs"
+      }
+    }
+    terraform_lxc = {
+      name = "LXC"
+      terraform_workspace = {
+        workspace = "lxc"
       }
     }
   }
@@ -126,6 +150,14 @@ locals {
         name  = "BW_PASSWORD"
         value = data.bitwarden_secret.secret["bitwarden_password"].value
         type  = "env"
+        }, {
+        name  = "TAILSCALE_API_KEY" 
+        value = data.bitwarden_secret.secret["tailscale_api_key"].value
+        type  = "env"
+        }, {
+        name  = "TAILSCALE_TAILNET"
+        value = data.bitwarden_secret.secret["tailscale_tailnet"].value
+        type  = "env"
         }
       ]
     }
@@ -148,6 +180,38 @@ locals {
         }, {
         name  = "BWS_ACCESS_TOKEN"
         value = data.bitwarden_secret.secret["bitwarden_auth_token"].value
+        type  = "env"
+        }, {
+        name  = "PM_USER"
+        value = data.bitwarden_secret.secret["proxmox_api_user"].value
+        type  = "env"
+        }, {
+        name  = "PM_PASS"
+        value = data.bitwarden_secret.secret["proxmox_api_password"].value
+        type  = "env"
+        }, {
+        name  = "PM_API_URL"
+        value = data.bitwarden_secret.secret["proxmox_api_url"].value
+        type  = "env"
+        }, {
+        name  = "SPLUNK_URL"
+        value = data.bitwarden_secret.secret["splunk_url"].value
+        type  = "env"
+        }, {
+        name  = "SPLUNK_USERNAME"
+        value = data.bitwarden_secret.secret["splunk_api_user"].value
+        type  = "env"
+        }, {
+        name  = "SPLUNK_PASSWORD"
+        value = data.bitwarden_secret.secret["splunk_api_password"].value
+        type  = "env"
+        }, {
+        name  = "TAILSCALE_API_KEY" 
+        value = data.bitwarden_secret.secret["tailscale_api_key"].value
+        type  = "env"
+        }, {
+        name  = "TAILSCALE_TAILNET"
+        value = data.bitwarden_secret.secret["tailscale_tailnet"].value
         type  = "env"
         }
       ]
@@ -173,6 +237,18 @@ locals {
       playbook    = "certs"
       repository  = "terraform_homelab"
       inventory   = "terraform_certs"
+      environment = "terraform_homelab_bw"
+      arguments = [
+        "-parallelism=1"
+      ]
+    }
+    terraform_LXC = {
+      name        = "terraform_lxc"
+      description = "Terraform tasks for the LXC homelab project"
+      app         = "tofu"
+      playbook    = "lxc"
+      repository  = "terraform_homelab"
+      inventory   = "terraform_lxc"
       environment = "terraform_homelab_bw"
       arguments = [
         "-parallelism=1"

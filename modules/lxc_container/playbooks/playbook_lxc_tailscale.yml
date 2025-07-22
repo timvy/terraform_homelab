@@ -1,0 +1,31 @@
+---
+- name: Configure lxc container
+  hosts: all
+  connection: lxc_ssh
+  user: root
+
+  tasks:
+    # - name: update all packages
+    #   apt:
+    #     update_cache: yes
+    #     upgrade: dist
+
+    - name: install tailscale dependencies
+      apt:
+        update_cache: true
+        name:
+          - curl
+          - sudo
+        state: present
+
+    - name: download script
+      uri:
+        url: https://tailscale.com/install.sh
+        dest: /tmp/tailscale_install.sh
+        mode: "u+x"
+
+    - name: run script
+      shell: "/tmp/tailscale_install.sh"
+
+    - name: run tailscale
+      shell: "tailscale up --authkey {{ tailscale_authkey }}"
