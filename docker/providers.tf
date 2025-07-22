@@ -65,6 +65,4 @@ data "bitwarden_item_login" "tailscale_api_key" {
 }
 
 provider "tailscale" {
-  api_key = data.bitwarden_item_login.tailscale_api_key.password
-  tailnet = "timvy.github"
 }
