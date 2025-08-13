@@ -394,6 +394,12 @@ locals {
           read_only = true
         }
       }            
+      labels = {
+        traefik_port = {
+          label = "traefik.http.services.portainer.loadbalancer.server.port"
+          value = "9443"
+        }
+      }
     }
     samba = {
       image                  = "dperson/samba:latest"
