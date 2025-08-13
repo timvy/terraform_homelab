@@ -381,7 +381,6 @@ locals {
       image   = "portainer/portainer-ce:latest"
       restart = "unless-stopped"
       network = [docker_network.lxc-docker3["portainer"].name]
-      docker_traefik_enabled = false
       volumes = {
         portainer_data = {
           container_path = "/data"
