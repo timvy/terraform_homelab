@@ -10,6 +10,7 @@ locals {
     firefly      = {}
     wallabag     = {}
     traefik      = {}
+    portainer    = {}
   }
 
   secrets_lxc-docker3 = {
@@ -375,7 +376,25 @@ locals {
       image   = "ghcr.io/flaresolverr/flaresolverr:latest"
       restart = "unless-stopped"
       network = [docker_network.lxc-docker3["download"].name]
+    }
+    portainer = {
+      image   = "ghcr.io/portainer/portainer-ce:latest"
+      restart = "unless-stopped"
+      network = [docker_network.lxc-docker3["portainer"].name]
       docker_traefik_enabled = false
+      volumes = {
+        portainer_data = {
+          container_path = "/data"
+        }
+      }
+      mounts = {
+        docker_sock = {
+          source    = "/var/run/docker.sock"
+          target    = "/var/run/docker.sock"
+          type      = "bind"
+          read_only = true
+        }
+      }            
     }
     samba = {
       image                  = "dperson/samba:latest"
@@ -435,7 +454,8 @@ locals {
         docker_network.lxc-docker3["jellyfin"].name,
         docker_network.lxc-docker3["kuma"].name,
         docker_network.lxc-docker3["searxng"].name,
-        docker_network.lxc-docker3["wallabag"].name
+        docker_network.lxc-docker3["wallabag"].name,
+        docker_network.lxc-docker3["portainer"].name
       ]
       docker_traefik_enabled = false
       ports = {
