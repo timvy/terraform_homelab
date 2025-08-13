@@ -371,6 +371,12 @@ locals {
         }
       }
     }
+    flaresolverr = {
+      image   = "ghcr.io/flaresolverr/flaresolverr:latest"
+      restart = "unless-stopped"
+      network = [docker_network.lxc-docker3["download"].name]
+      docker_traefik_enabled = false
+    }
     samba = {
       image                  = "dperson/samba:latest"
       network                = [docker_network.lxc-docker3["samba"].name]
