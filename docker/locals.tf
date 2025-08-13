@@ -378,7 +378,7 @@ locals {
       network = [docker_network.lxc-docker3["download"].name]
     }
     portainer = {
-      image   = "ghcr.io/portainer/portainer-ce:latest"
+      image   = "portainer/portainer-ce:latest"
       restart = "unless-stopped"
       network = [docker_network.lxc-docker3["portainer"].name]
       docker_traefik_enabled = false
