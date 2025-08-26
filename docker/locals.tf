@@ -529,5 +529,25 @@ locals {
         "--entrypoints.https.address=:443",
       ]
     }
+    hishtory = {
+      image   = "lscr.io/linuxserver/hishtory-server:latest"
+      network = [docker_network.lxc-docker3["download"].name]
+      env = [
+        "TZ=Europe/Brussels",
+        "PUID=1000",
+        "PGID=1000",
+        "HISHTORY_SQLITE_DB=/config/hishtory.db"
+      ]
+      volumes = {
+        hishtory_config = {
+          container_path = "/config"
+        }
+      }
+      lsio_mods_tailscale_enabled = true
+      lsio_mods_tailscale_vars = {
+        tailscale_serve_port = 8080
+        tailscale_hostname   = "hishtory"
+      }
+    }    
   }
 }
