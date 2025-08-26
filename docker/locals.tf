@@ -268,7 +268,7 @@ locals {
     }
     jellyfin = {
       image   = "lscr.io/linuxserver/jellyfin:latest"
-      network = [docker_network.lxc-docker3["jellyfin"].name]
+      network = [docker_network.lxc-docker3["download"].name]
       env = [
         "TZ=Europe/Brussels",
         "PUID=1000",
