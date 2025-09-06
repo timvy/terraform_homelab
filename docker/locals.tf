@@ -211,7 +211,6 @@ locals {
         }
       }
     }
-
     transmission = {
       image   = "lscr.io/linuxserver/transmission:latest"
       network = [docker_network.lxc-docker3["download"].name]
@@ -318,6 +317,10 @@ locals {
           container_path = "/etc/searxng"
         }
       }
+    }
+    ittools = {
+      image   = "sharevb/it-tools:latest"
+      network = [docker_network.lxc-docker3["download"].name]
     }
     rss = {
       image   = "lscr.io/linuxserver/freshrss:latest"
