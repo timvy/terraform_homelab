@@ -260,6 +260,12 @@ locals {
           target = "/downloads"
         }
       }
+      labels = {
+        traefik_port = {
+          label = "traefik.http.services.portainer.loadbalancer.server.port"
+          value = "8080"
+        }
+      }      
       lsio_mods_tailscale_enabled = true
       lsio_mods_tailscale_vars = {
         tailscale_serve_port = 8080
