@@ -302,7 +302,7 @@ locals {
       }
     }
     kuma = {
-      image   = "louislam/uptime-kuma:latest"
+      image   = "louislam/uptime-kuma:beta"
       network = [docker_network.lxc-docker3["kuma"].name]
       mounts = {
         kuma_config = {
