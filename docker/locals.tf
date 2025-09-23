@@ -260,6 +260,12 @@ locals {
           target = "/downloads"
         }
       }
+      ports = {
+        torrent = {
+          internal = 6881
+          external = 6881
+        }
+      }      
       labels = {
         traefik_port = {
           label = "traefik.http.services.portainer.loadbalancer.server.port"
