@@ -2,7 +2,7 @@ terraform {
   required_providers {
     proxmox = {
       source  = "telmate/proxmox"
-      version = "3.0.1-rc9"
+      version = "3.0.2-rc04"
     }
     zfs = {
       source = "MathiasPius/zfs"
@@ -54,6 +54,8 @@ provider "zfs" {
   key_path = "/config/semaphore/.ssh/semaphore_homelab.key"
 }
 
-provider "splunk" {}
+provider "splunk" {
+  insecure_skip_verify = true
+}
 
 provider "tailscale" {}
