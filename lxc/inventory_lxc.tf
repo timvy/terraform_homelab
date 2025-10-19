@@ -206,6 +206,16 @@ locals {
         }
       },
     }
+    "lxc-qbit" = {
+      config = {
+        hostname = "lxc-qbit"
+        distro   = "debian"
+        tags     = "qbit;ssh;tailscale"
+        memory   = "4096"
+        nesting  = true
+        cores    = "2"
+      },
+    }
     "lxc-ntfy" = {
       config = {
         hostname = "lxc-ntfy"
