@@ -17,6 +17,7 @@ resource "semaphoreui_project_key" "project_keys" {
   name       = each.key
   ssh = {
     private_key = each.value.private_key
+    user        = lookup(each.value, "user", "")
   }
 }
 

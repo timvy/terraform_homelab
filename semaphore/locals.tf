@@ -58,6 +58,7 @@ locals {
     }
     semaphore_homelab = {
       private_key = data.bitwarden_secret.secret["ssh_semaphore_github"].value
+      user        = "ansible"
     }
   }
   repositories = {
@@ -151,7 +152,7 @@ locals {
         value = data.bitwarden_secret.secret["bitwarden_password"].value
         type  = "env"
         }, {
-        name  = "TAILSCALE_API_KEY" 
+        name  = "TAILSCALE_API_KEY"
         value = data.bitwarden_secret.secret["tailscale_api_key"].value
         type  = "env"
         }, {
@@ -206,7 +207,7 @@ locals {
         value = data.bitwarden_secret.secret["splunk_api_password"].value
         type  = "env"
         }, {
-        name  = "TAILSCALE_API_KEY" 
+        name  = "TAILSCALE_API_KEY"
         value = data.bitwarden_secret.secret["tailscale_api_key"].value
         type  = "env"
         }, {
