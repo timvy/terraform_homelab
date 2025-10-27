@@ -11,6 +11,7 @@ locals {
     wallabag     = {}
     traefik      = {}
     portainer    = {}
+    web          = {}
   }
 
   secrets_lxc-docker3 = {
@@ -308,7 +309,7 @@ locals {
       }
     }
     kuma = {
-      image   = "louislam/uptime-kuma:beta"
+      image   = "louislam/uptime-kuma:2"
       network = [docker_network.lxc-docker3["kuma"].name]
       mounts = {
         kuma_config = {
@@ -475,7 +476,8 @@ locals {
         docker_network.lxc-docker3["kuma"].name,
         docker_network.lxc-docker3["searxng"].name,
         docker_network.lxc-docker3["wallabag"].name,
-        docker_network.lxc-docker3["portainer"].name
+        docker_network.lxc-docker3["portainer"].name,
+        docker_network.lxc-docker3["web"].name
       ]
       docker_traefik_enabled = false
       ports = {
@@ -562,6 +564,15 @@ locals {
       lsio_mods_tailscale_vars = {
         tailscale_serve_port = 8080
         tailscale_hostname   = "hishtory"
+      }
+    }    
+    giftmanager = {
+      image   = "icbest/giftmanager:latest"
+      network = [docker_network.lxc-docker3["web"].name]
+      volumes = {
+        data = {
+          container_path = "/app/data"
+        }
       }
     }    
   }
