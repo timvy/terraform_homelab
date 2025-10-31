@@ -51,12 +51,12 @@ locals {
             "volume" = "/mnt/merger/media"
             "mp"     = "/media"
             "size"   = "10000G"
-          }
-          "timemachine" = {
+          },
+          timemachine = {
             "volume" = "/mnt/samsung_pm/binds/samba_data_tm"
             "mp"     = "/timemachine"
             "size"   = "1000G"
-          },
+          }
         }
 
         location_config = "/var/lib/docker"

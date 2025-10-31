@@ -1,64 +1,30 @@
 locals {
   bitwarden_secrets = [
-    {
-      key = "bitwarden_auth_token"
-    },
-    {
-      key = "bitwarden_client_id"
-    },
-    {
-      key = "bitwarden_client_secret"
-    },
-    {
-      key = "bitwarden_password"
-    },
-    {
-      key = "minio_s3_url"
-    },
-    {
-      key = "minio_tf_access_key"
-    },
-    {
-      key = "minio_tf_secret"
-    },
-    {
-      key = "proxmox_api_password"
-    },
-    {
-      key = "proxmox_api_url"
-    },
-    {
-      key = "proxmox_api_user"
-    },
-    {
-      key = "ssh_semaphore_github"
-    },
-    {
-      key = "ssh_semaphore_homelab"
-    },
-    {
-      key = "splunk_url"
-    },
-    {
-      key = "splunk_api_password"
-    },
-    {
-      key = "splunk_api_user"
-    },
-    {
-      key = "tailscale_api_key"
-    },
-    {
-      key = "tailscale_tailnet"
-    },
+    "bitwarden_auth_token",
+    "bitwarden_client_id",
+    "bitwarden_client_secret",
+    "bitwarden_password",
+    "minio_s3_url",
+    "minio_tf_access_key",
+    "minio_tf_secret",
+    "proxmox_api_password",
+    "proxmox_api_url",
+    "proxmox_api_user",
+    "ssh_semaphore_github",
+    "ssh_semaphore_homelab",
+    "splunk_url",
+    "splunk_api_password",
+    "splunk_api_user",
+    "tailscale_api_key",
+    "tailscale_tailnet"
   ]
-  project_keys = {
+  project_keys_ssh = {
     semaphore_github = {
       private_key = data.bitwarden_secret.secret["ssh_semaphore_github"].value
     }
     semaphore_homelab = {
-      private_key = data.bitwarden_secret.secret["ssh_semaphore_github"].value
-      user        = "ansible"
+      private_key = data.bitwarden_secret.secret["ssh_semaphore_homelab"].value
+      login        = "ansible"
     }
   }
   repositories = {
@@ -100,7 +66,7 @@ locals {
     }
   }
   environments = {
-    proxmox = {
+    ansible_proxmox = {
       name        = "Proxmox Inventory"
       variables   = {}
       environment = {}
@@ -219,7 +185,14 @@ locals {
     }
   }
   templates = {
-    docker = {
+    ans_os_update = {
+      name        = "ans_os_update"
+      playbook    = "playbooks/os_update.yml"
+      repository  = "ansible_collection_homelab"
+      inventory   = "ansible_inventory_proxmox"
+      environment = "ansible_proxmox"
+    }
+    terraform_docker = {
       name        = "terraform_docker"
       description = "Terraform tasks for the docker homelab project"
       app         = "tofu"
@@ -242,6 +215,11 @@ locals {
       arguments = [
         "-parallelism=1"
       ]
+      schedules = {
+        tf_certs_weekly = {
+          cron_format = "0 0 * * 0"
+        }
+      }
     }
     terraform_LXC = {
       name        = "terraform_lxc"
