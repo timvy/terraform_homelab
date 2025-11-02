@@ -544,6 +544,7 @@ locals {
         "--providers.docker",
         "--entrypoints.http.address=:80",
         "--entrypoints.https.address=:443",
+        "--entrypoints.https.forwardedHeaders.trustedIPs=192.168.6.29"
       ]
     }
     hishtory = {
