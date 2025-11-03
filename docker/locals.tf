@@ -559,7 +559,7 @@ locals {
       network = [for net in keys(local.docker_networks_lxc-docker3) : docker_network.lxc-docker3[net].name]
       volumes = {
         tsdproxy_data = {
-          container_path = "/app/data"
+          container_path = "/data"
         }
         tsdproxy_config = {
           container_path = "/config"
