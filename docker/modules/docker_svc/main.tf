@@ -38,7 +38,6 @@ resource "docker_volume" "this" {
 
 resource "docker_container" "this" {
     lifecycle {
-    ignore_changes = [labels]
   }
   name         = var.docker_container_name
   hostname     = var.docker_container_hostname != null ? var.docker_container_hostname : var.docker_container_name
