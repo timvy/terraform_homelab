@@ -543,7 +543,7 @@ locals {
       image   = "icbest/giftmanager:latest"
       network = [docker_network.lxc-docker3["web"].name]
       volumes = {
-        data = {
+        giftmanager_data = {
           container_path = "/app/data"
         }
       }
