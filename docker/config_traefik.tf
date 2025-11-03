@@ -1,9 +1,7 @@
 locals {
 
   traefik_static_config = yamlencode({
-    accessLog = {
-      enabled = true
-    }
+    accessLog = {}
     providers = {
       file = {
         directory = "/etc/traefik/dynamic"
