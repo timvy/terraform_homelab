@@ -90,25 +90,6 @@ locals {
         tailscale_serve_port = 9696
       }
     }
-    jackett = {
-      image   = "lscr.io/linuxserver/jackett:latest"
-      network = [docker_network.lxc-docker3["download"].name]
-      env = [
-        "TZ=Europe/Brussels",
-        "PUID=1000",
-        "PGID=1000",
-      ]
-      mounts = {
-        config = {
-          source = "/mnt/bindmounts/jackett_config"
-          target = "/config"
-        }
-      }
-      lsio_mods_tailscale_enabled = true
-      lsio_mods_tailscale_vars = {
-        tailscale_serve_port = 9117
-      }
-    }
     sonarr = {
       image   = "lscr.io/linuxserver/sonarr:latest"
       network = [docker_network.lxc-docker3["download"].name]
@@ -566,33 +547,6 @@ locals {
         tailscale_hostname   = "hishtory"
       }
     }
-    files = {
-      image   = "lscr.io/linuxserver/nginx:latest"
-      network = [docker_network.lxc-docker3["web"].name]
-      env = [
-        "TZ=Europe/Brussels",
-        "PUID=1000",
-        "PGID=1000",
-      ]
-      mounts = {
-        videos = {
-          source = "/media/videos"
-          target = "/videos"
-        }
-      }
-      uploads = merge(
-        {
-          config = {
-            content_base64 = base64encode(file("files/nginx/files"))
-            file           = "/config/nginx/files"
-          }
-        }
-      )
-      lsio_mods_tailscale_enabled = true
-      lsio_mods_tailscale_vars = {
-        tailscale_serve_port = 7878
-      }
-    }    
     giftmanager = {
       image   = "icbest/giftmanager:latest"
       network = [docker_network.lxc-docker3["web"].name]
