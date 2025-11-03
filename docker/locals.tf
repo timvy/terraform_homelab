@@ -547,6 +547,12 @@ locals {
           container_path = "/app/data"
         }
       }
+      labels = {
+        tsdproxy_enable = {
+          label = "tsdproxy.enable"
+          value = true
+        }
+      }
     }
     tsdproxy = {
       image   = "almeidapaulopt/tsdproxy:2"
