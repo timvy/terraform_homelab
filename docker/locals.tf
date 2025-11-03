@@ -551,6 +551,10 @@ locals {
         tsdproxy_enable = {
           label = "tsdproxy.enable"
           value = true
+        },
+        tsdproxy_container_port = {
+          label = "tsdproxy.container_port"
+          value = "5000"
         }
       }
     }
