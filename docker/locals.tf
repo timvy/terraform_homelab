@@ -450,16 +450,8 @@ locals {
     }
     traefik = {
       image = "traefik:latest"
-      network = [
-        docker_network.lxc-docker3["traefik"].name,
-        docker_network.lxc-docker3["download"].name,
-        docker_network.lxc-docker3["jellyfin"].name,
-        docker_network.lxc-docker3["kuma"].name,
-        docker_network.lxc-docker3["searxng"].name,
-        docker_network.lxc-docker3["wallabag"].name,
-        docker_network.lxc-docker3["portainer"].name,
-        docker_network.lxc-docker3["web"].name
-      ]
+      network = [for net in keys(local.docker_networks_lxc-docker3) : docker_network.lxc-docker3[net].name]
+
       docker_traefik_enabled = false
       ports = {
         traefik_http = {
@@ -555,6 +547,33 @@ locals {
           container_path = "/app/data"
         }
       }
-    }    
+    }
+    tsdproxy = {
+      image   = "almeidapaulopt/tsdproxy:2"
+      network = [for net in keys(local.docker_networks_lxc-docker3) : docker_network.lxc-docker3[net].name]
+      volumes = {
+        tsdproxy_data = {
+          container_path = "/app/data"
+        }
+        tsdproxy_config = {
+          container_path = "/config"
+        }
+      }
+      mounts = {
+        docker_sock = {
+          source    = "/var/run/docker.sock"
+          target    = "/var/run/docker.sock"
+          type      = "bind"
+          read_only = true
+        }
+      }
+      uploads = {
+        tsdproxy_config = {
+          content_base64 = base64encode(local.tsdproxy_config)
+          file           = "/config/tsdproxy.yaml"
+        }
+      }
+    }
+
   }
 }
