@@ -478,8 +478,12 @@ locals {
       uploads = merge(
         {
           traefik_dynamic = {
-            content_base64 = base64encode(file("files/traefik/traefik_dynamic.yml"))
+            content_base64 = base64encode(local.traefik_dynamic_config)
             file           = "/etc/traefik/dynamic/traefik_dynamic.yml"
+          }
+          traefik_static = {
+            content_base64 = base64encode(local.traefik_static_config)
+            file           = "/etc/traefik/traefik.yml"
           }
         },
         {
@@ -489,34 +493,8 @@ locals {
           }
         }
       )
-      labels = {
-        admin-auth = {
-          label = "traefik.http.middlewares.admin-auth.basicauth.users"
-          value = "admin:${bcrypt(random_password.this["traefik_admin_user"].result)}"
-        }
-        api = {
-          label = "traefik.http.routers.traefik.service=api@internal"
-          value = "api@internal"
-        }
-        dashboard = {
-          label = "traefik.http.routers.api.rule"
-          value = "Host(`traefik.${local.domain_home}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
-        }
-        api_service = {
-          label = "traefik.http.routers.api.service"
-          value = "api@internal"
-        }
-        api_middlewares = {
-          label = "traefik.http.routers.api.middlewares"
-          value = "admin-auth"
-        }
-      }
       command = [
-        "--accesslog=true",
-        "--providers.file.directory=/etc/traefik/dynamic",
-        "--providers.docker",
-        "--entrypoints.http.address=:80",
-        "--entrypoints.https.address=:443",
+        "--configFile=/etc/traefik/traefik.yml"
       ]
     }
     hishtory = {
