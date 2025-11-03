@@ -1,5 +1,5 @@
 data "bitwarden_item_login" "tailscale_tsdproxy" {
-  search = "tailscale_tsdproxy"
+  search = "tailscale_tsdproxy_key"
 }
 
 locals {
@@ -15,8 +15,7 @@ locals {
     tailscale = {
       providers = {
         default = {
-          clientId     = data.bitwarden_item_login.tailscale_tsdproxy.username
-          clientSecret = data.bitwarden_item_login.tailscale_tsdproxy.password
+          authKey = data.bitwarden_item_login.tailscale_tsdproxy.password
         }
       }
       dataDir = "/data/"
