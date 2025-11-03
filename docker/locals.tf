@@ -247,13 +247,13 @@ locals {
           internal = 6881
           external = 6881
         }
-      }      
+      }
       labels = {
         traefik_port = {
           label = "traefik.http.services.portainer.loadbalancer.server.port"
           value = "8080"
         }
-      }      
+      }
       lsio_mods_tailscale_enabled = true
       lsio_mods_tailscale_vars = {
         tailscale_serve_port = 8080
@@ -390,7 +390,7 @@ locals {
           type      = "bind"
           read_only = true
         }
-      }            
+      }
       labels = {
         traefik_port = {
           label = "traefik.http.services.portainer.loadbalancer.server.port"
@@ -449,7 +449,7 @@ locals {
       }
     }
     traefik = {
-      image = "traefik:latest"
+      image   = "traefik:latest"
       network = [for net in keys(local.docker_networks_lxc-docker3) : docker_network.lxc-docker3[net].name]
 
       docker_traefik_enabled = false
@@ -531,8 +531,14 @@ locals {
           value = true
         },
         tsdproxy_container_port = {
-          label = "tsdproxy.container_port"
-          value = "5000"
+          label = "tsdproxy.port.1"
+          value = "443/https:5000/http"
+        }
+      }
+      ports = {
+        traefik_http = {
+          internal = 5000
+          external = 5001
         }
       }
     }
