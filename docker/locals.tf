@@ -561,6 +561,10 @@ locals {
           read_only = true
         }
       }
+      hosts = {
+        host = "host.docker.internal"
+        ip = "host-gateway"
+      }
       uploads = {
         tsdproxy_config = {
           content_base64 = base64encode(local.tsdproxy_config)

@@ -69,6 +69,7 @@ module "docker_container_lxc-docker3" {
   docker_volumes              = lookup(each.value, "volumes", {})
   docker_mounts               = lookup(each.value, "mounts", {})
   docker_ports                = lookup(each.value, "ports", {})
+  hosts                       = lookup(each.value, "hosts", {})
   lsio_mods_tailscale_enabled = lookup(each.value, "lsio_mods_tailscale_enabled", false)
   lsio_mods_tailscale_vars    = lookup(each.value, "lsio_mods_tailscale_vars", null)
   secrets                     = lookup(each.value, "secrets", null)

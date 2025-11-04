@@ -77,6 +77,13 @@ resource "docker_container" "this" {
       read_only = lookup(mounts.value, "read_only", false)
     }
   }
+  dynamic "host" {
+    for_each = var.hosts != null ? var.hosts : {}
+    content {
+      host = hosts.value.host
+      ip   = hosts.value.ip
+    }
+    }
   dynamic "labels" {
     for_each = local.docker_labels != null ? local.docker_labels : {}
     content {

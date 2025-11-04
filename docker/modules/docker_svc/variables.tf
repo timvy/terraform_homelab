@@ -88,3 +88,7 @@ variable "uploads" {
 variable "devices" {
   default = null
 }
+
+variable "hosts" {
+  default = null
+}
