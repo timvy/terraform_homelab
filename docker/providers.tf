@@ -17,7 +17,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket                      = "tofu-backend"
+    bucket = "tofu-backend"
     # Semaphore puts the state file in environment subfolders /env:/docker
     # key                         = "env:/docker/terraform.tfstate"
     key                         = "terraform.tfstate"

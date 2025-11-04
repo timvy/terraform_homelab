@@ -567,12 +567,20 @@ locals {
           ip   = "host-gateway"
         }
       }
-      uploads = {
-        tsdproxy_config = {
-          content_base64 = base64encode(local.tsdproxy_config)
-          file           = "/config/tsdproxy.yaml"
+      uploads = merge(
+        {
+          tsdproxy_config = {
+            content_base64 = base64encode(local.tsdproxy_config)
+            file           = "/config/tsdproxy.yaml"
+          }
+        },
+        {
+          for k, v in local.tsdproxy_lists : "tsdproxy_${k}" => {
+            content_base64 = base64encode(v)
+            file           = "/config/${k}.yaml"
+          }
         }
-      }
+      )
     }
 
   }

@@ -6,12 +6,18 @@ locals {
   tsdproxy_config = yamlencode({
     docker = {
       local = {
-        host                      = "unix:///var/run/docker.sock"
-        targetHostname            = "host.docker.internal"
+        host                     = "unix:///var/run/docker.sock"
+        targetHostname           = "host.docker.internal"
         tryDockerInternalNetwork = false
       }
     }
-    lists = {}
+    lists = {
+      for k, v in local.tsdproxy_lists : k => {
+        filename              = "/config/${k}.yaml"
+        defaultProxyProvider  = "default"
+        defaultProxyAccessLog = true
+      }
+    }
     tailscale = {
       providers = {
         default = {
@@ -26,8 +32,21 @@ locals {
     }
     log = {
       level = "info"
-      json  = false
+      json  = true
     }
     proxyAccessLog = true
   })
+  tsdproxy_lists = {
+    containers = yamlencode({
+      wallabag = {
+        ports = {
+          "443/https" = {
+            targets = [
+              "http://wallabag:80"
+            ]
+          }
+        }
+      }
+    })
+  }
 }
