@@ -562,8 +562,10 @@ locals {
         }
       }
       hosts = {
-        host = "host.docker.internal"
-        ip = "host-gateway"
+        gateway = {
+          host = "host.docker.internal"
+          ip   = "host-gateway"
+        }
       }
       uploads = {
         tsdproxy_config = {
