@@ -7,7 +7,7 @@ locals {
     docker = {
       local = {
         host                      = "unix:///var/run/docker.sock"
-        targetHostname            = "172.31.0.1"
+        targetHostname            = "host.docker.internal"
         tryDockerInternalNetwork = false
       }
     }
