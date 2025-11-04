@@ -80,8 +80,8 @@ resource "docker_container" "this" {
   dynamic "host" {
     for_each = var.hosts != null ? var.hosts : {}
     content {
-      host = hosts.value.host
-      ip   = hosts.value.ip
+      host = host.value.host
+      ip   = host.value.ip
     }
     }
   dynamic "labels" {
