@@ -22,6 +22,7 @@ locals {
       providers = {
         default = {
           authKey = data.bitwarden_item_login.tailscale_tsdproxy.password
+          authKeyFile = ""
         }
       }
       dataDir = "/data/"
