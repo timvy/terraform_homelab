@@ -542,6 +542,10 @@ locals {
         }
       }
     }
+    yrouter = {
+      image   = "ghcr.io/timvy/y-router:main"
+      network = [docker_network.lxc-docker3["web"].name]
+   }    
     tsdproxy = {
       image   = "almeidapaulopt/tsdproxy:2"
       network = [for net in keys(local.docker_networks_lxc-docker3) : docker_network.lxc-docker3[net].name]

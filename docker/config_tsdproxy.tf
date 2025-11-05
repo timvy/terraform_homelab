@@ -48,6 +48,20 @@ locals {
           }
         }
       }
+      yrouter = {
+        ports = {
+          "443/https" = {
+            targets = [
+              "http://yrouter:8787"
+            ]
+          }
+          "80/http" = {
+            targets = [
+              "http://yrouter:8787"
+            ]
+          }
+        }
+      }
     })
   }
 }
