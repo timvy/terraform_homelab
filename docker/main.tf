@@ -1,13 +1,14 @@
-resource "docker_network" "lxc-docker3" {
-  for_each = local.docker_networks_lxc-docker3
+# Dynamic Docker networks for all hosts
+resource "docker_network" "networks" {
+  for_each = local.networks_map
 
-  provider = docker.lxc-docker3
-  name     = each.key
-  driver   = lookup(each.value, "driver", "bridge")
+  provider = docker.hosts[split(".", each.key)[0]]
+  name     = split(".", each.key)[1]
+  driver   = lookup(each.value.config, "driver", "bridge")
 }
 
 locals {
-  secrets = merge(local.secrets_lxc-docker3)
+  secrets = local.all_secrets
 }
 
 resource "random_password" "this" {
@@ -55,16 +56,21 @@ locals {
   ])
 }
 
-module "docker_container_lxc-docker3" {
-  for_each    = local.docker_container_lxc-docker3
+# Dynamic Docker containers for all hosts
+module "docker_containers" {
+  for_each    = local.containers_map
   source      = "./modules/docker_svc"
   domain_home = local.domain_home
   providers = {
-    docker = docker.lxc-docker3
+    docker = docker.hosts[split(".", each.key)[0]]
   }
+
+  # Extract host and container names
+  docker_container_name = split(".", each.key)[1]
+
+  # Container configuration
   image                       = each.value.image
   docker_network_name         = each.value.network
-  docker_container_name       = each.key
   docker_env_variables        = lookup(each.value, "env", [])
   docker_volumes              = lookup(each.value, "volumes", {})
   docker_mounts               = lookup(each.value, "mounts", {})

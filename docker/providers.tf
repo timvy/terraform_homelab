@@ -54,10 +54,12 @@ provider "pihole" {
   password = data.bitwarden_item_login.pihole.password
 }
 
+# Dynamic Docker providers using OpenTofu's for_each feature
 provider "docker" {
-  alias    = "lxc-docker3"
-  host     = "ssh://ansible@lxc-docker3.internal:22"
-  ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no", "-o", "IdentityFile=~/.ssh/semaphore_homelab.key"]
+  alias    = "hosts"
+  for_each = local.docker_hosts
+  host     = each.value.host
+  ssh_opts = each.value.ssh_opts
 }
 
 data "bitwarden_item_login" "tailscale_api_key" {
