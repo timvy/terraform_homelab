@@ -5,7 +5,7 @@ locals {
   # Define Docker hosts (static only - no dynamic values)
   docker_hosts = {
     lxc-docker3 = {
-      host     = "ssh://ansible@lxc-docker3.${local.domain_tailscale}:22"
+      host     = "ssh://ansible@lxc-docker3.internal:22"
       ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no", "-o", "IdentityFile=~/.ssh/semaphore_homelab.key"]
     }
   }
