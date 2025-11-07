@@ -21,7 +21,7 @@ locals {
     tailscale = {
       providers = {
         default = {
-          authKey = data.bitwarden_item_login.tailscale_tsdproxy.password
+          authKey     = data.bitwarden_item_login.tailscale_tsdproxy.password
           authKeyFile = ""
         }
       }
