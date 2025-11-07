@@ -59,7 +59,7 @@ locals {
       middlewares = {
         admin-auth = {
           basicAuth = {
-            users = ["admin:{PLAIN}${random_password.this["traefik_admin_user"].result}"]
+            users = ["admin:{PLAIN}${random_password.this["lxc-docker3.traefik_admin_user"].result}"]
           }
         }
       }
