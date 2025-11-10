@@ -240,36 +240,6 @@ locals {
           }
         }
       }
-      transmission = {
-        image   = "lscr.io/linuxserver/transmission:latest"
-        network = [docker_network.networks["lxc-docker3.download"].name]
-        env = [
-          "TZ=Europe/Brussels",
-          "PUID=1000",
-          "PGID=1000",
-        ]
-        mounts = {
-          config = {
-            source = "/mnt/bindmounts/transmission_config"
-            target = "/config"
-          }
-          downloads = {
-            source = "/media/downloads"
-            target = "/downloads"
-          }
-        }
-        ports = {
-          torrent = {
-            internal = 51413
-            external = 51413
-            protocol = "udp"
-          }
-        }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 9091
-        }
-      }
       qbit = {
         image   = "lscr.io/linuxserver/qbittorrent:latest"
         network = [docker_network.networks["lxc-docker3.download"].name]
