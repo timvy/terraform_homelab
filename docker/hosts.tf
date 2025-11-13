@@ -640,9 +640,4 @@ locals {
       }
     ]
   ])
-
-  # Create a map for containers: "host.container" => config (will be enhanced with dynamic env vars)
-  containers_map = {
-    for container in local.flattened_containers : "${container.host}.${container.name}" => container.config
-  }
 }
