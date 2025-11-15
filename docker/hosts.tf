@@ -511,22 +511,6 @@ locals {
             container_path = "/app/data"
           }
         }
-        labels = {
-          tsdproxy_enable = {
-            label = "tsdproxy.enable"
-            value = true
-          },
-          tsdproxy_container_port = {
-            label = "tsdproxy.port.1"
-            value = "443/https:5000/http"
-          }
-        }
-        ports = {
-          traefik_http = {
-            internal = 5000
-            external = 5001
-          }
-        }
       }
       wallabag = {
         image   = "wallabag/wallabag:latest"
@@ -640,4 +624,9 @@ locals {
       }
     ]
   ])
+
+  # Create a map for containers: "host.container" => config (will be enhanced with dynamic env vars)
+  containers_map = {
+    for container in local.flattened_containers : "${container.host}.${container.name}" => container.config
+  }
 }

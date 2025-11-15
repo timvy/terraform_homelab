@@ -39,29 +39,31 @@ locals {
   })
   tsdproxy_lists = {
     containers = yamlencode({
-      wallabag = {
+      for cname, port in local.tsdproxy_containers : cname => {
         ports = {
           "443/https" = {
             targets = [
-              "http://wallabag:80"
-            ]
-          }
-        }
-      }
-      yrouter = {
-        ports = {
-          "443/https" = {
-            targets = [
-              "http://yrouter:8787"
+              "http://${cname}:${port}"
             ]
           }
           "80/http" = {
             targets = [
-              "http://yrouter:8787"
+              "http://${cname}:${port}"
             ]
           }
         }
       }
-    })
+      }
+    )
+  }
+  tsdproxy_containers = {
+    "giftmanager" = "5000"
+    "ittools"     = "80"
+    "kuma"        = "3001"
+    "pinchflat"   = "4008"
+    "portainer"   = "9000"
+    "search"      = "8080"
+    "wallabag"    = "80"
+    "yrouter"     = "8787"
   }
 }
