@@ -538,15 +538,30 @@ locals {
           media_shares = {
             content_base64 = base64encode(<<-EOF
               server {
-                  listen 80;
-                  root /media/videos;
-                  location / {
-                      autoindex on;
-                  }
+                listen 80;
+                server_name media.internal;
+                root /media/videos;
+                index index.html;
+
+                # enable directory listing
+                location / {
+                  autoindex on;
+                  autoindex_exact_size off;
+                  autoindex_localtime on;
+                  try_files $uri $uri/ =404;
+                }
+
+                # explicit alias for /videos/ if needed
+                location /videos/ {
+                  alias /media/videos/;
+                  autoindex on;
+                  autoindex_exact_size off;
+                  autoindex_localtime on;
+                }
               }
             EOF
             )
-            file = "/etc/nginx/nginx.conf"
+            file = "/etc/nginx/conf.d/media_shares.conf"
           }
         }
         mounts = {
