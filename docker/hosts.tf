@@ -531,6 +531,31 @@ locals {
         image   = "ghcr.io/timvy/y-router:main"
         network = [docker_network.networks["lxc-docker3.web"].name]
       }
+      files = {
+        image   = "nginx:trixie-perl"
+        network = [docker_network.networks["lxc-docker3.web"].name]
+        uploads = {
+          media_shares = {
+            content_base64 = base64encode(<<-EOF
+              server {
+                  listen 80;
+                  root /media/videos;
+                  location / {
+                      autoindex on;
+                  }
+              }
+            EOF
+            )
+            file = "/etc/nginx/nginx.conf"
+          }
+        }
+        mounts = {
+          media = {
+            source = "/media/videos"
+            target = "/media/videos"
+          }
+        }
+      }
       tsdproxy = {
         image = "almeidapaulopt/tsdproxy:2"
         network = [
