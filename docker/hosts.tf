@@ -331,7 +331,7 @@ locals {
       }
       ittools = {
         image   = "sharevb/it-tools:latest"
-        network = [docker_network.networks["lxc-docker3.download"].name]
+        network = [docker_network.networks["lxc-docker3.web"].name]
       }
       rss = {
         image   = "lscr.io/linuxserver/freshrss:latest"

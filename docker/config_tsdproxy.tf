@@ -59,7 +59,7 @@ locals {
   tsdproxy_containers = {
     "files"       = "80"
     "giftmanager" = "5000"
-    "ittools"     = "80"
+    "ittools"     = "8080"
     "kuma"        = "3001"
     "pinchflat"   = "4008"
     "portainer"   = "9000"
