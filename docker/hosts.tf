@@ -16,6 +16,7 @@ locals {
       authentik    = {}
       healthchecks = {}
       download     = {}
+      hedgedoc     = {}
       jellyfin     = {}
       kuma         = {}
       samba        = {}
@@ -44,6 +45,7 @@ locals {
       firefly_db_root_pwd = {}
       firefly_db_pwd      = {}
       firefly_app_key     = {}
+      hedge_db_pwd        = {}
       wallabag_env_secret = {}
       samba_user_tim = {
         length = 32
@@ -103,12 +105,12 @@ locals {
           authentik_redis = {
             container_path = "/data"
           }
-        }        
+        }
       }
       authentik_worker = {
-        image   = "ghcr.io/goauthentik/server:latest"
-        restart = "unless-stopped"
-        network = [docker_network.networks["lxc-docker3.authentik"].name]
+        image                  = "ghcr.io/goauthentik/server:latest"
+        restart                = "unless-stopped"
+        network                = [docker_network.networks["lxc-docker3.authentik"].name]
         docker_traefik_enabled = false
         env = [
           "AUTHENTIK_POSTGRESQL__HOST=authentik_db",
@@ -154,6 +156,27 @@ locals {
         lsio_mods_tailscale_vars = {
           tailscale_serve_port = 8000
           tailscale_hostname   = "hc"
+        }
+      }
+      hedge = {
+        image   = "lscr.io/linuxserver/hedgedoc:latest"
+        network = [docker_network.networks["lxc-docker3.hedgedoc"].name]
+        env = [
+          "TZ=Europe/Brussels",
+          "PUID=1000",
+          "PGID=1000",
+          "HD_DATABASE_NAME=/config/hedgedoc.db",
+          "HD_DATABASE_TYPE=sqlite"
+        ]
+        volumes = {
+          hedge = {
+            container_path = "/config"
+          }
+        }
+        lsio_mods_tailscale_enabled = true
+        lsio_mods_tailscale_vars = {
+          tailscale_serve_port = 3000
+          tailscale_hostname   = "hedgedoc"
         }
       }
       radarr = {
