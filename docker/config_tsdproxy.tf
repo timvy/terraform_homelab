@@ -62,6 +62,7 @@ locals {
     "giftmanager" = "5000"
     "ittools"     = "8080"
     "kuma"        = "3001"
+    "pad"         = "9001"
     "pinchflat"   = "4008"
     "portainer"   = "9000"
     "search"      = "8080"

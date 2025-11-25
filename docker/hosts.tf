@@ -46,6 +46,7 @@ locals {
       firefly_db_pwd      = {}
       firefly_app_key     = {}
       hedge_db_pwd        = {}
+      pad_admin_password  = {}
       wallabag_env_secret = {}
       samba_user_tim = {
         length = 32
@@ -167,7 +168,10 @@ locals {
           "PGID=1000",
           "HD_DATABASE_NAME=/config/hedgedoc.db",
           "HD_DATABASE_TYPE=sqlite",
-          "CMD_DOMAIN=hedgedoc.${local.domain_tailscale}"
+          "CMD_DOMAIN=hedgedoc.${local.domain_pg}",
+          "CMD_EMAIL=true",
+          "CMD_ALLOW_EMAIL_REGISTER=true",
+          "CMD_ALLOW_ORIGIN=localhost,hedgedoc.${local.domain_tailscale},doc.${local.domain_pg}"
         ]
         volumes = {
           hedge = {
@@ -178,6 +182,25 @@ locals {
         lsio_mods_tailscale_vars = {
           tailscale_serve_port = 3000
           tailscale_hostname   = "hedgedoc"
+        }
+      }
+      pad = {
+        image   = "etherpad/etherpad:stable"
+        network = [docker_network.networks["lxc-docker3.hedgedoc"].name]
+        env = [
+          "NODE_ENV=production",
+          "ETHERPAD_ADMIN_PASSWORD=${random_password.this["lxc-docker3.pad_admin_password"].result}",
+          "DB_TYPE=sqlite",
+          "DB_SQLITE_FILE=/opt/etherpad-lite/var/etherpad.sq3"
+
+        ]
+        volumes = {
+          data = {
+            container_path = "/opt/etherpad-lite/var"
+          }
+          modules = {
+            container_path = "/opt/etherpad-lite/node_modules"
+          }
         }
       }
       radarr = {
