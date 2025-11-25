@@ -16,17 +16,19 @@ locals {
       authentik    = {}
       healthchecks = {}
       download     = {}
-      hedgedoc     = {}
-      jellyfin     = {}
-      kuma         = {}
-      samba        = {}
-      tsdproxy     = {}
-      searxng      = {}
-      firefly      = {}
-      wallabag     = {}
-      traefik      = {}
-      portainer    = {}
-      web          = {}
+      hedgedoc = {
+        length = 64
+      }
+      jellyfin  = {}
+      kuma      = {}
+      samba     = {}
+      tsdproxy  = {}
+      searxng   = {}
+      firefly   = {}
+      wallabag  = {}
+      traefik   = {}
+      portainer = {}
+      web       = {}
     }
 
     # lxc-docker4 = {
@@ -45,7 +47,7 @@ locals {
       firefly_db_root_pwd = {}
       firefly_db_pwd      = {}
       firefly_app_key     = {}
-      hedge_db_pwd        = {}
+      hedge_session_pwd   = {}
       pad_admin_password  = {}
       wallabag_env_secret = {}
       samba_user_tim = {
@@ -168,10 +170,11 @@ locals {
           "PGID=1000",
           "HD_DATABASE_NAME=/config/hedgedoc.db",
           "HD_DATABASE_TYPE=sqlite",
-          "CMD_DOMAIN=hedgedoc.${local.domain_pg}",
+          "CMD_DOMAIN=doc.${local.domain_pg}",
           "CMD_EMAIL=true",
           "CMD_ALLOW_EMAIL_REGISTER=true",
-          "CMD_ALLOW_ORIGIN=localhost,hedgedoc.${local.domain_tailscale},doc.${local.domain_pg}"
+          "CMD_ALLOW_ORIGIN=localhost,hedgedoc.${local.domain_tailscale},doc.${local.domain_pg}",
+          "CMD_SESSION_SECRET=${random_password.this["lxc-docker3.hedge_session_pwd"].result}"
         ]
         volumes = {
           hedge = {
@@ -185,7 +188,7 @@ locals {
         }
       }
       pad = {
-        image   = "etherpad/etherpad:stable"
+        image   = "etherpad/etherpad:latest"
         network = [docker_network.networks["lxc-docker3.hedgedoc"].name]
         env = [
           "NODE_ENV=production",
