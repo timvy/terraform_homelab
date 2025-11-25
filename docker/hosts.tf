@@ -166,7 +166,8 @@ locals {
           "PUID=1000",
           "PGID=1000",
           "HD_DATABASE_NAME=/config/hedgedoc.db",
-          "HD_DATABASE_TYPE=sqlite"
+          "HD_DATABASE_TYPE=sqlite",
+          "CMD_DOMAIN=hedgedoc.${local.domain_tailscale}"
         ]
         volumes = {
           hedge = {
