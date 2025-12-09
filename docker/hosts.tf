@@ -638,7 +638,7 @@ locals {
         ]
         volumes = {
           wallabag_data = {
-            container_path = "/var/www/wallabag/dat"
+            container_path = "/var/www/wallabag/data"
           }
         }
       }
