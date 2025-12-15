@@ -543,6 +543,11 @@ locals {
             }
           }
         )
+        volumes = {
+          traefik_config = {
+            container_path = "/etc/traefik"
+          }
+        }        
         command = [
           "--configFile=/etc/traefik/traefik.yml"
         ]
