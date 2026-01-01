@@ -47,7 +47,7 @@ data "bitwarden_item_secure_note" "domains" {
 locals {
   domain_home      = try([for field in data.bitwarden_item_secure_note.domains.field : field.text if field.name == "home"][0], null)
   domain_tailscale = try([for field in data.bitwarden_item_secure_note.domains.field : field.text if field.name == "tailscale"][0], null)
-  domain_pg = try([for field in data.bitwarden_item_secure_note.domains.field : field.text if field.name == "pg"][0], null)
+  domain_pg        = try([for field in data.bitwarden_item_secure_note.domains.field : field.text if field.name == "pg"][0], null)
 }
 
 provider "pihole" {

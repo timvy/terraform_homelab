@@ -30,10 +30,10 @@ resource "zfs_dataset" "data" {
 }
 
 resource "zfs_dataset" "config" {
-  name          = "${var.zfs_binds}/${var.hostname}_config"
-  mountpoint    = "/${var.zfs_binds}/${var.hostname}_config"
-  uid           = 100000
-  gid           = 100000
+  name       = "${var.zfs_binds}/${var.hostname}_config"
+  mountpoint = "/${var.zfs_binds}/${var.hostname}_config"
+  uid        = 100000
+  gid        = 100000
   lifecycle {
     ignore_changes = [
       # Ignore changes to uid and gid, because the container may have changed them to something local
@@ -92,10 +92,10 @@ resource "random_password" "this" {
 resource "bitwarden_secret" "this" {
   for_each = var.secrets != null ? var.secrets : {}
 
-  key      = "${var.hostname}_${each.key}"
-  value  = random_password.this[each.key].result
+  key        = "${var.hostname}_${each.key}"
+  value      = random_password.this[each.key].result
   project_id = "8e37b6b5-0614-453e-bce3-b2f5009aec66"
-  note = "${var.hostname}_${each.key}"
+  note       = "${var.hostname}_${each.key}"
 }
 
 resource "tailscale_tailnet_key" "this" {
@@ -149,7 +149,7 @@ resource "proxmox_lxc" "this" {
       bridge = lookup(network.value, "bridge", "vmbr1")
       ip     = lookup(network.value, "ip", null)
       gw     = lookup(network.value, "gw", null)
-      tag    = lookup(network.value, "tag", null)      
+      tag    = lookup(network.value, "tag", null)
     }
   }
 
@@ -175,44 +175,44 @@ EOT
       "true"
     )
   }
-#   provisioner "local-exec" {
-#     command = (
-#       var.lxc_ostemplate[var.config.distro] == "alpine" ?
-#       "ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} apk add python3" :
-#       "true"
-#     )
-#   }
-#   provisioner "local-exec" {
-#     command = <<EOT
-# sleep 10
-# # ansible all -i $IP_ADDRESS, -m ansible.builtin.apt -a "update_cache=yes name=* state=latest" -u root --ssh-extra-args="-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null"
-# ansible all -m ping -i local, -u root -c lxc_ssh -e "ansible_host=proxmox lxc_host=${regex("\\d+", "${self.id}")}"
-# ssh proxmox pct reboot ${regex("\\d+", "${self.id}")}
+  #   provisioner "local-exec" {
+  #     command = (
+  #       var.lxc_ostemplate[var.config.distro] == "alpine" ?
+  #       "ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} apk add python3" :
+  #       "true"
+  #     )
+  #   }
+  #   provisioner "local-exec" {
+  #     command = <<EOT
+  # sleep 10
+  # # ansible all -i $IP_ADDRESS, -m ansible.builtin.apt -a "update_cache=yes name=* state=latest" -u root --ssh-extra-args="-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null"
+  # ansible all -m ping -i local, -u root -c lxc_ssh -e "ansible_host=proxmox lxc_host=${regex("\\d+", "${self.id}")}"
+  # ssh proxmox pct reboot ${regex("\\d+", "${self.id}")}
 
-# EOT
-#   }
+  # EOT
+  #   }
   lifecycle {
     ignore_changes = [
       ssh_public_keys
     ]
   }
-#   provisioner "local-exec" {
-#     command = (
-#       contains(split(";", var.config.tags), "tailscale") ?
-#       <<EOT
-# # ansible all -m ping -i local, -u root -c lxc_ssh -e "ansible_host=proxmox lxc_host=${regex("\\d+", "${self.id}")}"
-# ansible-playbook -i ${var.pm_uri}, ../../modules/lxc_container/playbooks/playbook_lxc_tailscale.yml --extra-vars 'ansible_host=proxmox lxc_host=${regex("\\d+", "${self.id}")} tailscale_authkey=${tailscale_tailnet_key.this[0].key}'
-# # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- apt install -y curl sudo
-# # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- curl https://tailscale.com/install.sh -o /tmp/tailscale_install.sh
-# # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- chmod +x /tmp/tailscale_install.sh
-# # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- /tmp/tailscale_install.sh
-# # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- sudo tailscale up --accept-dns=false --auth-key=${tailscale_tailnet_key.this[0].key}"
+  #   provisioner "local-exec" {
+  #     command = (
+  #       contains(split(";", var.config.tags), "tailscale") ?
+  #       <<EOT
+  # # ansible all -m ping -i local, -u root -c lxc_ssh -e "ansible_host=proxmox lxc_host=${regex("\\d+", "${self.id}")}"
+  # ansible-playbook -i ${var.pm_uri}, ../../modules/lxc_container/playbooks/playbook_lxc_tailscale.yml --extra-vars 'ansible_host=proxmox lxc_host=${regex("\\d+", "${self.id}")} tailscale_authkey=${tailscale_tailnet_key.this[0].key}'
+  # # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- apt install -y curl sudo
+  # # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- curl https://tailscale.com/install.sh -o /tmp/tailscale_install.sh
+  # # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- chmod +x /tmp/tailscale_install.sh
+  # # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- /tmp/tailscale_install.sh
+  # # ssh ${var.pm_user}@${var.pm_uri} pct exec ${regex("\\d+", "${self.id}")} -- sudo tailscale up --accept-dns=false --auth-key=${tailscale_tailnet_key.this[0].key}"
 
-# EOT
-#       :
-#       "true"
-#     )
-#   }
+  # EOT
+  #       :
+  #       "true"
+  #     )
+  #   }
 }
 
 resource "splunk_inputs_monitor" "log" {
@@ -222,7 +222,7 @@ resource "splunk_inputs_monitor" "log" {
   recursive  = false
   sourcetype = each.value.sourcetype
   index      = each.value.index
-  host = lookup(each.value, "host", var.hostname)
+  host       = lookup(each.value, "host", var.hostname)
 
   depends_on = [
     proxmox_lxc.this

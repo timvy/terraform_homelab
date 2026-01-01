@@ -48,8 +48,8 @@ locals {
 provider "proxmox" {}
 
 provider "zfs" {
-  user     = "ansible"
-  host     = "pve-hpe.${local.domain_tailscale}"
+  user = "ansible"
+  host = "pve-hpe.${local.domain_tailscale}"
   # key      = "semaphore_homelab.key"
   key_path = "/config/semaphore/.ssh/semaphore_homelab.key"
 }

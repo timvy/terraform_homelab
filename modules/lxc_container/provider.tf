@@ -18,6 +18,6 @@ terraform {
     }
     tailscale = {
       source = "tailscale/tailscale"
-    }       
+    }
   }
 }
