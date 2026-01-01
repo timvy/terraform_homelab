@@ -112,7 +112,7 @@ locals {
       config = {
         hostname = "lxc-splunk"
         distro   = "ubuntu"
-        memory   = "8192"
+        memory   = "16384"
         cores    = "4"
         tags     = "tailscale"
         "networks" = {
