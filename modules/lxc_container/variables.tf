@@ -55,7 +55,7 @@ variable "lxc_ostemplate" {
   type = map(string)
   default = {
     "alpine"         = "local:vztmpl/alpine-3.15-default_20211202_amd64.tar.xz"
-    "debian"         = "local:vztmpl/debian-11-standard_11.0-1_amd64.tar.gz"
+    "debian"         = "local:vztmpl/debian-13-standard_amd64.tar.xz"
     "debian12"       = "local:vztmpl/debian-12-standard_12.0-1_amd64.tar.zst"
     "ubuntu"         = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
     "ubuntu-minimal" = "local:vztmpl/ubuntu-22.04-minimal-cloudimg-amd64-root.tar.xz"
