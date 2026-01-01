@@ -48,6 +48,7 @@ locals {
 provider "proxmox" {}
 
 provider "zfs" {
+  command_prefix = "sudo"
   user = "ansible"
   host = "pve-hpe.${local.domain_tailscale}"
   # key      = "semaphore_homelab.key"
