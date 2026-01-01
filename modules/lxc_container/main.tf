@@ -191,13 +191,11 @@ EOT
 
 # EOT
 #   }
-#   lifecycle {
-#     ignore_changes = [
-#       ssh_public_keys,
-#       ostemplate,
-#       rootfs
-#     ]
-#   }
+  lifecycle {
+    ignore_changes = [
+      ssh_public_keys
+    ]
+  }
 #   provisioner "local-exec" {
 #     command = (
 #       contains(split(";", var.config.tags), "tailscale") ?
