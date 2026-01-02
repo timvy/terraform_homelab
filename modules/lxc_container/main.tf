@@ -193,7 +193,8 @@ resource "proxmox_lxc" "this" {
   #   }
   lifecycle {
     ignore_changes = [
-      ssh_public_keys
+      ssh_public_keys,
+      ostemplate
     ]
   }
   #   provisioner "local-exec" {
