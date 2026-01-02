@@ -421,16 +421,6 @@ locals {
           tailscale_serve_port = 8096
         }
       }
-      kuma = {
-        image   = "louislam/uptime-kuma:2"
-        network = [docker_network.networks["lxc-docker3.kuma"].name]
-        mounts = {
-          kuma_config = {
-            source = "/mnt/bindmounts/uptime-kuma"
-            target = "/app/data"
-          }
-        }
-      }
       search = {
         image   = "searxng/searxng:latest"
         network = [docker_network.networks["lxc-docker3.searxng"].name]
