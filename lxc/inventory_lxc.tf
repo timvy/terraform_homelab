@@ -69,9 +69,9 @@ locals {
         }
       }
     },
-    "lxc-kuma" = {
+    "kuma" = {
       config = {
-        distro = "debian12"
+        distro = "debian"
         tags   = "kuma;tailscale"
       }
     },
