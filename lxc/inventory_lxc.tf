@@ -205,5 +205,22 @@ locals {
         admin = {}
       },
     },
+    "cribl" = {
+      config = {
+        distro = "debian"
+        memory = "8000"
+        cores  = "4"
+        tags   = "cribl,tailscale"
+        "networks" = {
+          "eth0" = {
+            ip  = "dhcp"
+            tag = 2
+        } }
+        location_config = "/opt/cribl/"
+        location_data   = "/opt/cribldata/"
+        size_data       = "100G"
+
+      },
+    }
   }
 }
