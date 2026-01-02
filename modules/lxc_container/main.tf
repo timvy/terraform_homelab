@@ -164,17 +164,17 @@ resource "proxmox_lxc" "this" {
       size    = lookup(mountpoint.value, "size", null)
     }
   }
-  provisioner "local-exec" {
-    command = (
-      contains(split(";", var.config.tags), "tailscale") ?
-      <<EOT
-ansible all -i proxmox, -m ansible.builtin.lineinfile -a "path=/etc/pve/lxc/${regex("\\d+", "${self.id}")}.conf line='lxc.cgroup2.devices.allow: c 10:200 rwm' insertafter=EOF"
-ansible all -i proxmox, -m ansible.builtin.lineinfile -a "path=/etc/pve/lxc/${regex("\\d+", "${self.id}")}.conf line='lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file' insertafter=EOF"
-EOT
-      :
-      "true"
-    )
-  }
+#   provisioner "local-exec" {
+#     command = (
+#       contains(split(";", var.config.tags), "tailscale") ?
+#       <<EOT
+# ansible all -i proxmox, -m ansible.builtin.lineinfile -a "path=/etc/pve/lxc/${regex("\\d+", "${self.id}")}.conf line='lxc.cgroup2.devices.allow: c 10:200 rwm' insertafter=EOF"
+# ansible all -i proxmox, -m ansible.builtin.lineinfile -a "path=/etc/pve/lxc/${regex("\\d+", "${self.id}")}.conf line='lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file' insertafter=EOF"
+# EOT
+#       :
+#       "true"
+#     )
+#   }
   #   provisioner "local-exec" {
   #     command = (
   #       var.lxc_ostemplate[var.config.distro] == "alpine" ?
