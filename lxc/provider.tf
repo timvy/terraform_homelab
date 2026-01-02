@@ -2,7 +2,7 @@ terraform {
   required_providers {
     proxmox = {
       source  = "telmate/proxmox"
-      version = "3.0.2-rc05"
+      version = "3.0.2-rc07"
     }
     zfs = {
       source = "MathiasPius/zfs"
@@ -20,6 +20,7 @@ terraform {
   backend "s3" {
     bucket                      = "tofu-backend"
     key                         = "terraform.tfstate"
+    # key                         = "env:/lxc/terraform.tfstate"
     region                      = "main" # this is required, but will be skipped!
     skip_credentials_validation = true   # this will skip AWS related validation
     skip_metadata_api_check     = true
