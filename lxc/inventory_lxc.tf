@@ -129,7 +129,8 @@ locals {
             "mp"     = "/mnt/logs/pve-hpe"
             "size"   = "100G"
           },
-      } }
+        }
+      }
     },
     "lxc-samba" = {
       config = {
@@ -214,7 +215,13 @@ locals {
         location_config = "/opt/cribl/"
         location_data   = "/opt/cribldata/"
         size_data       = "100G"
-
+        mounts = {
+          "syslog_pve" = {
+            "volume" = "/var/log"
+            "mp"     = "/mnt/logs/pve-hpe"
+            "size"   = "100G"
+          },
+        }
       },
     }
   }
