@@ -161,6 +161,12 @@ locals {
         memory   = "4096"
         nesting  = true
         cores    = "2"
+        mounts = {
+          media = {
+            "volume" = "/mnt/merger/media"
+            "mp"     = "/media"
+            "size"   = "10000G"
+          }
       },
     }
     "lxc-ntfy" = {
