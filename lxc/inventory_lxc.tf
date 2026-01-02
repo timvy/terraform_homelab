@@ -124,11 +124,6 @@ locals {
         location_data   = "/opt/splunkdata/"
         size_data       = "100G"
         mounts = {
-          "syslog_ng" = {
-            "volume" = "/nvme/lz4/binds/lxc-syslog_data/"
-            "mp"     = "/data"
-            "size"   = "100G"
-          },
           "syslog_pve" = {
             "volume" = "/var/log"
             "mp"     = "/mnt/logs/pve-hpe"
