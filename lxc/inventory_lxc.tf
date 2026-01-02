@@ -157,9 +157,9 @@ locals {
         }
       },
     }
-    "lxc-qbit" = {
+    "qbit" = {
       config = {
-        hostname = "lxc-qbit"
+        hostname = "qbit"
         distro   = "debian"
         tags     = "qbit;ssh;tailscale"
         memory   = "4096"
