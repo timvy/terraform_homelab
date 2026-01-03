@@ -167,7 +167,14 @@ locals {
             "mp"     = "/media"
             "size"   = "10000G"
           }
-      },
+        },
+        "networks" = {
+          "eth0" = {
+            ip  = "dhcp"
+            tag = 11
+          }
+        }
+      }
     }
     "lxc-ntfy" = {
       config = {
