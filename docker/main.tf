@@ -26,31 +26,38 @@ resource "bitwarden_item_login" "this" {
   folder_id = "3a1b0d22-efe3-46c0-ad34-aee901619f5e"
 }
 
-# certs for traefik
-data "terraform_remote_state" "certs" {
-  backend = "s3"
+locals {
+  domains = {
+    home = {
+      common_name = "*.${local.domain_home}"
+    }
+    nextcloud = {
+      common_name = "nextcloud.${local.domain_home}"
+    }
+  }
+}
 
-  config = {
-    bucket                      = "tofu-backend"
-    key                         = "env:/certs/terraform.tfstate"
-    region                      = "main" # this is required, but will be skipped!
-    skip_credentials_validation = true   # this will skip AWS related validation
-    skip_metadata_api_check     = true
-  skip_region_validation = true }
+data "bitwarden_secret" "certificates" {
+  for_each = merge(
+    { for domain, config in local.domains : "${domain}_fullchain" => { key = "certificate_${config.common_name}_fullchain" } },
+    { for domain, config in local.domains : "${domain}_privkey" => { key = "certificate_${config.common_name}_privkey" } }
+  )
+
+  key = each.value.key
 }
 
 locals {
   flattened_certificates = flatten([
-    for name, certs in data.terraform_remote_state.certs.outputs.all_certificates : [
+    for domain, config in local.domains : [
       {
-        name    = name
+        name    = domain
         file    = "fullchain.pem"
-        content = certs.fullchain
+        content = data.bitwarden_secret.certificates["${domain}_fullchain"].value
       },
       {
-        name    = name
+        name    = domain
         file    = "privkey.pem"
-        content = certs.privkey
+        content = data.bitwarden_secret.certificates["${domain}_privkey"].value
       }
     ]
   ])
