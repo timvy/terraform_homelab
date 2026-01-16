@@ -36,23 +36,29 @@ provider "bitwarden" {
   }
 }
 
-data "bitwarden_item_login" "pihole" {
-  search = "pihole"
+data "bitwarden_secret" "pihole" {
+  key = "pihole"
 }
 
-data "bitwarden_item_secure_note" "domains" {
-  search = "domains"
+data "bitwarden_secret" "domain_home" {
+  key = "domain_home"
+}
+data "bitwarden_secret" "domain_tailscale" {
+  key = "domain_tailscale"
+}
+data "bitwarden_secret" "domain_pg" {
+  key = "domain_pg"
 }
 
 locals {
-  domain_home      = try([for field in data.bitwarden_item_secure_note.domains.field : field.text if field.name == "home"][0], null)
-  domain_tailscale = try([for field in data.bitwarden_item_secure_note.domains.field : field.text if field.name == "tailscale"][0], null)
-  domain_pg        = try([for field in data.bitwarden_item_secure_note.domains.field : field.text if field.name == "pg"][0], null)
+  domain_home      = data.bitwarden_secret.domain_home.value
+  domain_pg        = data.bitwarden_secret.domain_pg.value
+  domain_tailscale = data.bitwarden_secret.domain_tailscale.value
 }
 
 provider "pihole" {
   url      = "http://lxc-pihole2.${local.domain_tailscale}"
-  password = data.bitwarden_item_login.pihole.password
+  password = data.bitwarden_secret.pihole.value
 }
 
 # Dynamic Docker providers using OpenTofu's for_each feature
@@ -63,8 +69,8 @@ provider "docker" {
   ssh_opts = each.value.ssh_opts
 }
 
-data "bitwarden_item_login" "tailscale_api_key" {
-  search = "tailscale_api_key"
+data "bitwarden_secret" "tailscale_api_key" {
+  key = "tailscale_api_key"
 }
 
 provider "tailscale" {

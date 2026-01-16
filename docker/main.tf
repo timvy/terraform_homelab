@@ -11,6 +11,10 @@ locals {
   secrets = local.all_secrets
 }
 
+data "bitwarden_project" "homelab" {
+  id = "8e37b6b5-0614-453e-bce3-b2f5009aec66"
+}
+
 resource "random_password" "this" {
   for_each = local.secrets != null ? local.secrets : {}
 
@@ -18,12 +22,13 @@ resource "random_password" "this" {
   special = try(each.value.special, false)
 }
 
-resource "bitwarden_item_login" "this" {
+resource "bitwarden_secret" "this" {
   for_each = local.secrets != null ? local.secrets : {}
 
-  name      = each.key
-  password  = random_password.this[each.key].result
-  folder_id = "3a1b0d22-efe3-46c0-ad34-aee901619f5e"
+  key        = each.key
+  value      = random_password.this[each.key].result
+  project_id = data.bitwarden_project.homelab.id
+  note       = "Generated password for ${each.key}"
 }
 
 locals {
