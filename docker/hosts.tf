@@ -740,7 +740,7 @@ locals {
         network = [docker_network.networks["hetzner.pangolin"].name]
         docker_mounts = {
           config = {
-            source = "./config"
+            source = "/opt/pangolin/config"
             target = "/app/config"
             type   = "bind"
           }
@@ -766,18 +766,18 @@ locals {
         ]
         docker_mounts = {
           traefik_config = {
-            source    = "./config/traefik"
+            source    = "/opt/pangolin/config/traefik"
             target    = "/etc/traefik"
             type      = "bind"
             read_only = true
           }
           letsencrypt = {
-            source = "./config/letsencrypt"
+            source = "/opt/pangolin/config/letsencrypt"
             target = "/letsencrypt"
             type   = "bind"
           }
           traefik_logs = {
-            source = "./config/traefik/logs"
+            source = "/opt/pangolin/config/traefik/logs"
             target = "/var/log/traefik"
             type   = "bind"
           }
