@@ -68,6 +68,12 @@ locals {
   ])
 }
 
+data "bitwarden_secret" "imported_secrets" {
+  for_each = toset(local.imported_secrets)
+
+  key = each.value
+}
+
 # Dynamic Docker containers for all hosts
 module "docker_containers" {
   for_each    = local.containers_map

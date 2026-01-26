@@ -8,6 +8,10 @@ locals {
       host     = "ssh://ansible@lxc-docker3.internal:22"
       ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no", "-o", "IdentityFile=~/.ssh/semaphore_homelab.key"]
     }
+    hetzner = {
+      host     = "ssh://ansible@hetzner.internal:22"
+      ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no", "-o", "IdentityFile=~/.ssh/semaphore_homelab.key"]
+    }
   }
 
   # Define networks per host
@@ -16,9 +20,7 @@ locals {
       authentik    = {}
       healthchecks = {}
       download     = {}
-      hedgedoc = {
-        length = 64
-      }
+      hedgedoc = {}
       jellyfin  = {}
       kuma      = {}
       samba     = {}
@@ -35,6 +37,10 @@ locals {
     #   apps = {}
     #   monitoring = {}
     # }
+
+    hetzner = {
+      pangolin = {}
+    }
   }
 
   # Define secrets per host
@@ -59,11 +65,12 @@ locals {
       traefik_admin_user = {}
     }
 
-    # lxc-docker4 = {
-    #   app_secret = {}
-    # }
+    hetzner = {}
   }
 
+  imported_secrets = [
+    "hetzner_api_token"
+  ]
   # Define containers per host (static configuration only)
   docker_containers = {
     lxc-docker3 = {
@@ -724,6 +731,57 @@ locals {
             }
           }
         )
+      }
+    }
+    hetzner = {
+      pangolin = {
+        image   = "fosrl/pangolin:1.14.1"
+        restart = "unless-stopped"
+        network = [docker_network.networks["hetzner.pangolin"].name]
+        docker_mounts = {
+          config = {
+            source = "./config"
+            target = "/app/config"
+            type   = "bind"
+          }
+        }
+      }
+      traefik = {
+        image   = "traefik:v3.5"
+        restart = "unless-stopped"
+        network = [docker_network.networks["hetzner.pangolin"].name]
+        ports = {
+          http = {
+            internal = 80
+            external = 80
+          }
+          https = {
+            internal = 443
+            external = 443
+          }
+        }
+        command = ["--configFile=/etc/traefik/traefik_config.yml"]
+        env = [
+          "HETZNER_API_TOKEN=${data.bitwarden_secret.imported_secrets["hetzner_api_token"].value}"
+        ]
+        docker_mounts = {
+          traefik_config = {
+            source    = "./config/traefik"
+            target    = "/etc/traefik"
+            type      = "bind"
+            read_only = true
+          }
+          letsencrypt = {
+            source = "./config/letsencrypt"
+            target = "/letsencrypt"
+            type   = "bind"
+          }
+          traefik_logs = {
+            source = "./config/traefik/logs"
+            target = "/var/log/traefik"
+            type   = "bind"
+          }
+        }
       }
     }
   }
