@@ -194,25 +194,25 @@ locals {
           tailscale_hostname   = "hedgedoc"
         }
       }
-      pad = {
-        image   = "etherpad/etherpad:latest"
-        network = [docker_network.networks["lxc-docker3.hedgedoc"].name]
-        env = [
-          "NODE_ENV=production",
-          "ETHERPAD_ADMIN_PASSWORD=${random_password.this["lxc-docker3.pad_admin_password"].result}",
-          "DB_TYPE=sqlite",
-          "DB_SQLITE_FILE=/opt/etherpad-lite/var/etherpad.sq3"
+      # pad = {
+      #   image   = "etherpad/etherpad:latest"
+      #   network = [docker_network.networks["lxc-docker3.hedgedoc"].name]
+      #   env = [
+      #     "NODE_ENV=production",
+      #     "ETHERPAD_ADMIN_PASSWORD=${random_password.this["lxc-docker3.pad_admin_password"].result}",
+      #     "DB_TYPE=sqlite",
+      #     "DB_SQLITE_FILE=/opt/etherpad-lite/var/etherpad.sq3"
 
-        ]
-        volumes = {
-          data = {
-            container_path = "/opt/etherpad-lite/var"
-          }
-          modules = {
-            container_path = "/opt/etherpad-lite/node_modules"
-          }
-        }
-      }
+      #   ]
+      #   volumes = {
+      #     data = {
+      #       container_path = "/opt/etherpad-lite/var"
+      #     }
+      #     modules = {
+      #       container_path = "/opt/etherpad-lite/node_modules"
+      #     }
+      #   }
+      # }
       radarr = {
         image   = "lscr.io/linuxserver/radarr:latest"
         network = [docker_network.networks["lxc-docker3.download"].name]
