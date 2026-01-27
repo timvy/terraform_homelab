@@ -162,9 +162,19 @@ locals {
         nesting  = true
         cores    = "2"
         mounts = {
-          media = {
-            "volume" = "/mnt/merger/media"
-            "mp"     = "/media"
+          downloads = {
+            "volume" = "/mnt/merger/media/downloads/"
+            "mp"     = "/downloads"
+            "size"   = "10000G"
+          }
+          movies = {
+            "volume" = "/mnt/merger/media/videos/hdmovies"
+            "mp"     = "/movies"
+            "size"   = "10000G"
+          }
+          tv = {
+            "volume" = "/mnt/merger/media/videos/series"
+            "mp"     = "/tv"
             "size"   = "10000G"
           }
         },
