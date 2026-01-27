@@ -738,7 +738,7 @@ locals {
         image   = "fosrl/pangolin:1.15.1"
         restart = "unless-stopped"
         network = [docker_network.networks["hetzner.pangolin"].name]
-        docker_mounts = {
+        mounts = {
           config = {
             source = "/opt/pangolin/config"
             target = "/app/config"
@@ -764,7 +764,7 @@ locals {
         env = [
           "HETZNER_API_TOKEN=${data.bitwarden_secret.imported_secrets["hetzner_api_token"].value}"
         ]
-        docker_mounts = {
+        mounts = {
           traefik_config = {
             source    = "/opt/pangolin/config/traefik"
             target    = "/etc/traefik"
