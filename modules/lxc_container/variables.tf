@@ -79,6 +79,12 @@ variable "secrets" {
   default = null
 }
 
+variable "splunk_inputs_monitor_enable" {
+  type        = bool
+  default     = true
+  description = "Enable Splunk inputs monitor for the LXC container"
+}
+
 variable "splunk_inputs_monitor_syslog" {
   default = {
     "syslog" = {

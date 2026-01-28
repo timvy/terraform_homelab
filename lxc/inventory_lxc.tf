@@ -188,6 +188,7 @@ locals {
             tag = 11
           }
         }
+        splunk_inputs_monitor_enable = false
       }
     }
     "lxc-ntfy" = {

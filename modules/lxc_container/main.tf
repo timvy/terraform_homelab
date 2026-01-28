@@ -217,7 +217,7 @@ resource "proxmox_lxc" "this" {
 }
 
 resource "splunk_inputs_monitor" "log" {
-  for_each = merge(var.splunk_inputs_monitor_syslog, var.config.splunk_inputs_monitor_logfile)
+  for_each = var.splunk_inputs_monitor_enable ? merge(var.splunk_inputs_monitor_syslog, var.config.splunk_inputs_monitor_logfile) : {}
 
   name       = "/mnt/logs/${var.hostname}/${each.key}"
   recursive  = false
