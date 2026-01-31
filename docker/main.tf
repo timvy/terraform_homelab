@@ -4,7 +4,17 @@ resource "docker_network" "networks" {
 
   provider = docker.hosts[split(".", each.key)[0]]
   name     = split(".", each.key)[1]
-  driver   = lookup(each.value.config, "driver", "bridge")
+  driver   = lookup(each.value, "driver", "bridge")
+
+  dynamic "ipam_config" {
+    for_each = lookup(each.value, "ipam_config", null) != null ? [lookup(each.value, "ipam_config", null)] : []
+    content {
+      subnet  = lookup(ipam_config.value, "subnet", null)
+      gateway = lookup(ipam_config.value, "gateway", null)
+    }
+  }
+
+  options     = lookup(each.value, "options", null)
 }
 
 locals {

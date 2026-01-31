@@ -20,19 +20,28 @@ locals {
       authentik    = {}
       healthchecks = {}
       download     = {}
-      hedgedoc = {}
-      jellyfin  = {}
-      kuma      = {}
-      samba     = {}
-      tsdproxy  = {}
-      searxng   = {}
-      firefly   = {}
-      wallabag  = {}
-      traefik   = {}
-      portainer = {}
-      web       = {}
+      hedgedoc     = {}
+      jellyfin     = {}
+      kuma         = {}
+      samba        = {}
+      tsdproxy     = {}
+      searxng      = {}
+      firefly      = {}
+      wallabag     = {}
+      traefik      = {}
+      portainer    = {}
+      web          = {}
+      download_mac = {
+        driver = "macvlan"
+        ipam_config = {
+          subnet  = "192.168.11.0/24"
+          gateway = "192.168.11.1"
+        }
+        options = {
+          parent = "eth1"
+        }
+      }
     }
-
     # lxc-docker4 = {
     #   apps = {}
     #   monitoring = {}
@@ -360,42 +369,6 @@ locals {
           pinchflat_config = {
             container_path = "/config"
           }
-        }
-      }
-      qbit = {
-        image   = "lscr.io/linuxserver/qbittorrent:latest"
-        network = [docker_network.networks["lxc-docker3.download"].name]
-        env = [
-          "TZ=Europe/Brussels",
-          "PUID=1000",
-          "PGID=1000",
-        ]
-        volumes = {
-          qbit_config = {
-            container_path = "/config"
-          }
-        }
-        mounts = {
-          downloads = {
-            source = "/media/downloads"
-            target = "/downloads"
-          }
-        }
-        ports = {
-          torrent = {
-            internal = 6881
-            external = 6881
-          }
-        }
-        labels = {
-          traefik_port = {
-            label = "traefik.http.services.portainer.loadbalancer.server.port"
-            value = "8080"
-          }
-        }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 8080
         }
       }
       jellyfin = {
@@ -799,7 +772,7 @@ locals {
 
   # Create a map for easy lookup: "host.network" => config
   networks_map = {
-    for net in local.flattened_networks : "${net.host}.${net.name}" => net
+    for net in local.flattened_networks : "${net.host}.${net.name}" => net.config
   }
 
   # Flatten secrets for easy iteration
