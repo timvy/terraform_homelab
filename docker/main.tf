@@ -14,7 +14,7 @@ resource "docker_network" "networks" {
     }
   }
 
-  options     = lookup(each.value, "options", null)
+  options = lookup(each.value, "options", null)
 }
 
 locals {

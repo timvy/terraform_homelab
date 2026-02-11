@@ -164,8 +164,7 @@ locals {
           }
         }
       }
-      firefly = {}
-      healthchecks = {
+      firefly = {
         image   = "fireflyiii/core:latest"
         network = [docker_network.networks["lxc-docker3.firefly"].name]
         env = [
@@ -183,6 +182,21 @@ locals {
           firefly_iii_database = {
             container_path = "/var/www/html/storage/database"
           }
+        }
+      }
+      healthchecks = {
+        image   = "lscr.io/linuxserver/healthchecks:latest"
+        network = [docker_network.networks["lxc-docker3.healthchecks"].name]
+        env     = local.env_healthchecks
+        volumes = {
+          healthchecks = {
+            container_path = "/config"
+          }
+        }
+        lsio_mods_tailscale_enabled = true
+        lsio_mods_tailscale_vars = {
+          tailscale_serve_port = 8000
+          tailscale_hostname   = "hc"
         }
       }
       hedge = {
