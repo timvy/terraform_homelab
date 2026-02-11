@@ -10,5 +10,5 @@
 # Bitwarden cache
 .bitwarden
 
-# Ignore local Terraform backend override for lxc env
-lxc/backend.tf
+# Ignore local Terraform backend override
+backend.tf
