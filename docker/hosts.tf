@@ -61,7 +61,9 @@ locals {
       }
       firefly_db_root_pwd = {}
       firefly_db_pwd      = {}
-      firefly_app_key     = {}
+      firefly_app_key = {
+        length = 32
+      }
       hedge_session_pwd   = {}
       pad_admin_password  = {}
       wallabag_env_secret = {}
@@ -162,19 +164,25 @@ locals {
           }
         }
       }
+      firefly = {}
       healthchecks = {
-        image   = "lscr.io/linuxserver/healthchecks:latest"
-        network = [docker_network.networks["lxc-docker3.healthchecks"].name]
-        env     = local.env_healthchecks
+        image   = "fireflyiii/core:latest"
+        network = [docker_network.networks["lxc-docker3.firefly"].name]
+        env = [
+          "APP_KEY=${random_password.this["lxc-docker3.firefly_app_key"].result}",
+          "APP_URL=https://firefly.${local.domain_home}",
+          "DB_CONNECTION=sqlite",
+          "DEFAULT_LANGUAGE=nl_NL",
+          "TRUSTED_PROXIES=**",
+          "TZ=Europe/Brussels",
+        ]
         volumes = {
-          healthchecks = {
-            container_path = "/config"
+          firefly_iii_upload = {
+            container_path = "/var/www/html/storage/upload"
           }
-        }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 8000
-          tailscale_hostname   = "hc"
+          firefly_iii_database = {
+            container_path = "/var/www/html/storage/database"
+          }
         }
       }
       hedge = {
