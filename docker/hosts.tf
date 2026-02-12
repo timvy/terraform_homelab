@@ -64,6 +64,9 @@ locals {
       firefly_app_key = {
         length = 32
       }
+      firefly_import_secret = {
+        length = 32
+      }
       hedge_session_pwd   = {}
       pad_admin_password  = {}
       wallabag_env_secret = {}
@@ -80,7 +83,10 @@ locals {
   }
 
   imported_secrets = [
-    "hetzner_api_token"
+    "hetzner_api_token",
+    "firefly-api-importer",
+    "ENABLE_BANKING_APP_ID",
+    "ENABLE_BANKING_PRIVATE_KEY"
   ]
   # Define containers per host (static configuration only)
   docker_containers = {
@@ -181,6 +187,27 @@ locals {
           }
           firefly_iii_database = {
             container_path = "/var/www/html/storage/database"
+          }
+        }
+      }
+      firefly-importer = {
+        image   = "fireflyiii/data-importer:develop"
+        network = [docker_network.networks["lxc-docker3.firefly"].name]
+        env = [
+          "AUTO_IMPORT_SECRET=${random_password.this["lxc-docker3.firefly_import_secret"].result}",
+          "CAN_POST_AUTOIMPORT=true",
+          "ENABLE_BANKING_APP_ID=${data.bitwarden_secret.imported_secrets["ENABLE_BANKING_APP_ID"].value}",
+          "ENABLE_BANKING_PRIVATE_KEY=${data.bitwarden_secret.imported_secrets["ENABLE_BANKING_PRIVATE_KEY"].value}",
+          # "FIREFLY_III_CLIENT_ID=6",
+          "FIREFLY_III_ACCESS_TOKEN=${data.bitwarden_secret.imported_secrets["firefly-api-importer"].value}",
+          "FIREFLY_III_URL=https://firefly.${local.domain_home}",
+          "IMPORT_DIR_ALLOWLIST=/import",
+          "TRUSTED_PROXIES=**",
+          "TZ=Europe/Brussels",
+        ]
+        volumes = {
+          firefly_importer_import = {
+            container_path = "/import"
           }
         }
       }
