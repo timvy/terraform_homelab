@@ -80,7 +80,8 @@ locals {
   }
 
   imported_secrets = [
-    "hetzner_api_token"
+    "hetzner_api_token",
+    "firefly-api-importer"
   ]
   # Define containers per host (static configuration only)
   docker_containers = {
@@ -183,6 +184,17 @@ locals {
             container_path = "/var/www/html/storage/database"
           }
         }
+      }
+      firefly-importer = {
+        image   = "fireflyiii/data-importer:latest"
+        network = [docker_network.networks["lxc-docker3.firefly"].name]
+        env = [
+          "FIREFLY_III_ACCESS_TOKEN=${data.bitwarden_secret.imported_secrets["firefly-api-importer"].value}",
+          # "FIREFLY_III_CLIENT_ID=3",
+          "FIREFLY_III_URL=http://firefly:8080",
+          "TZ=Europe/Brussels",
+          "VANITY_URL=https://firefly.${local.domain_home}",
+        ]
       }
       healthchecks = {
         image   = "lscr.io/linuxserver/healthchecks:latest"
