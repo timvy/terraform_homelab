@@ -191,8 +191,9 @@ locals {
         }
       }
       firefly-importer = {
-        image   = "fireflyiii/data-importer:latest"
-        network = [docker_network.networks["lxc-docker3.firefly"].name]
+        image                  = "fireflyiii/data-importer:latest"
+        network                = [docker_network.networks["lxc-docker3.firefly"].name]
+        docker_traefik_enabled = false
         env = [
           "AUTO_IMPORT_SECRET=${random_password.this["lxc-docker3.firefly_import_secret"].result}",
           "CAN_POST_AUTOIMPORT=true",
