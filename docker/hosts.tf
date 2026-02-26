@@ -199,12 +199,18 @@ locals {
           "CAN_POST_AUTOIMPORT=true",
           "ENABLE_BANKING_APP_ID=${data.bitwarden_secret.imported_secrets["ENABLE_BANKING_APP_ID"].value}",
           "ENABLE_BANKING_PRIVATE_KEY=${data.bitwarden_secret.imported_secrets["ENABLE_BANKING_PRIVATE_KEY"].value}",
-          # "FIREFLY_III_CLIENT_ID=6",
           "FIREFLY_III_ACCESS_TOKEN=${data.bitwarden_secret.imported_secrets["firefly-api-importer"].value}",
           "FIREFLY_III_URL=https://firefly.${local.domain_home}",
           "IMPORT_DIR_ALLOWLIST=/import",
           "TRUSTED_PROXIES=**",
           "TZ=Europe/Brussels",
+          "IGNORE_DUPLICATE_ERRORS=false",
+          "ENABLE_MAIL_REPORT=true",
+          "MAIL_MAILER=smtp",
+          "MAIL_HOST=ntfy.sh",
+          "MAIL_FROM_ADDRESS=ff@example.com",
+          "MAIL_DESTINATION=ntfy-ad0b57e8-4a3c-41f0-8a1f-2ee56bdc5c6d@ntfy.sh",
+          "MAIL_PORT=25"
         ]
         volumes = {
           firefly_importer_import = {
