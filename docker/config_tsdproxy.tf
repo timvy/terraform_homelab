@@ -59,6 +59,7 @@ locals {
   tsdproxy_containers = {
     "authentik"   = "9000"
     "files"       = "80"
+    "firefly"     = "8080"
     "giftmanager" = "5000"
     "ittools"     = "8080"
     "pad"         = "9001"
