@@ -151,25 +151,6 @@ locals {
           "worker"
         ]
       }
-      firefly_db = {
-        image   = "lscr.io/linuxserver/mariadb:latest"
-        restart = "unless-stopped"
-        network = [docker_network.networks["lxc-docker3.firefly"].name]
-        env = [
-          "TZ=Europe/Brussels",
-          "PUID=1000",
-          "PGID=1000",
-          "MYSQL_USER=firefly",
-          "MYSQL_PASSWORD=${random_password.this["lxc-docker3.firefly_db_pwd"].result}",
-          "MYSQL_ROOT_PASSWORD=${random_password.this["lxc-docker3.firefly_db_root_pwd"].result}",
-          "MYSQL_DATABASE=firefly"
-        ]
-        volumes = {
-          firefly_db_config = {
-            container_path = "/config"
-          }
-        }
-      }
       firefly = {
         image   = "fireflyiii/core:latest"
         network = [docker_network.networks["lxc-docker3.firefly"].name]
