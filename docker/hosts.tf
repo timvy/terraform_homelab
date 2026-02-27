@@ -653,10 +653,6 @@ locals {
           }
         }
       }
-      yrouter = {
-        image   = "ghcr.io/timvy/y-router:main"
-        network = [docker_network.networks["lxc-docker3.web"].name]
-      }
       files = {
         image   = "nginx:trixie-perl"
         network = [docker_network.networks["lxc-docker3.web"].name]
