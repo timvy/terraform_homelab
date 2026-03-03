@@ -740,7 +740,7 @@ locals {
     }
     hetzner = {
       pangolin = {
-        image   = "fosrl/pangolin:1.15.1"
+        image   = "fosrl/pangolin:1.16.2"
         restart = "unless-stopped"
         network = [docker_network.networks["hetzner.pangolin"].name]
         mounts = {
@@ -752,7 +752,7 @@ locals {
         }
       }
       traefik = {
-        image   = "traefik:v3.5"
+        image   = "traefik:latest"
         restart = "unless-stopped"
         network = [docker_network.networks["hetzner.pangolin"].name]
         ports = {
