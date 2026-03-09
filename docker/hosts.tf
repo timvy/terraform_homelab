@@ -653,6 +653,19 @@ locals {
           }
         }
       }
+      trilium = {
+        image   = "triliumnext/trilium:latest"
+        restart = "unless-stopped"
+        network = [docker_network.networks["lxc-docker3.web"].name]
+        env = [
+          "TRILIUM_DATA_DIR=/home/node/trilium-data",
+        ]
+        volumes = {
+          trilium_data = {
+            container_path = "/home/node/trilium-data"
+          }
+        }
+      }
       files = {
         image   = "nginx:trixie-perl"
         network = [docker_network.networks["lxc-docker3.web"].name]
