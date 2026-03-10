@@ -280,10 +280,6 @@ locals {
             target = "/downloads"
           }
         }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 7878
-        }
       }
       prowlarr = {
         image   = "lscr.io/linuxserver/prowlarr:latest"
@@ -298,10 +294,6 @@ locals {
             source = "/mnt/bindmounts/prowlarr_config"
             target = "/config"
           }
-        }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 9696
         }
       }
       sonarr = {
@@ -325,10 +317,6 @@ locals {
             source = "/media/videos/"
             target = "/tv"
           }
-        }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 8989
         }
       }
       bazarr = {
@@ -357,10 +345,6 @@ locals {
             target = "/tv/series"
           }
         }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 6767
-        }
       }
       lidarr = {
         image   = "lscr.io/linuxserver/lidarr:latest"
@@ -383,10 +367,6 @@ locals {
             source = "/media/music"
             target = "/music"
           }
-        }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 8686
         }
       }
       pinchflat = {
