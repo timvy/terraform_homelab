@@ -21,9 +21,7 @@ terraform {
 provider "random" {}
 
 provider "bitwarden" {
-  experimental {
-    embedded_client = true
-  }
+    client_implementation = "embedded"
 }
 
 data "bitwarden_secret" "pihole" {
