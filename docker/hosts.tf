@@ -733,7 +733,7 @@ locals {
     }
     hetzner = {
       pangolin = {
-        image   = "fosrl/pangolin:latest"
+        image   = "fosrl/pangolin:1.16.2"
         restart = "unless-stopped"
         network = [docker_network.networks["hetzner.pangolin"].name]
         mounts = {
@@ -781,19 +781,6 @@ locals {
           }
         }
       }
-      baikal = {
-        image   = "ckulka/baikal:nginx"
-        restart = "unless-stopped"
-        network = [docker_network.networks["hetzner.pangolin"].name]
-        volumes = {
-          baikal_config = {
-            container_path = "/var/www/baikal/config"
-          }
-          baikal_specific = {
-            container_path = "/var/www/baikal/Specific"
-          }
-        }
-      }      
     }
   }
 
