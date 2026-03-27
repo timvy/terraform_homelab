@@ -799,7 +799,21 @@ locals {
             container_path = "/var/www/baikal/Specific"
           }
         }
-      }      
+      }
+      agendav = {
+        image   = "ghcr.io/nagimov/agendav-docker:latest"
+        restart = "unless-stopped"
+        network = [docker_network.networks["hetzner.baikal"].name]
+        env = [
+          "AGENDAV_SERVER_NAME=127.0.0.1",
+          "AGENDAV_CALDAV_SERVER=http://baikal/cal.php",
+          "AGENDAV_CALDAV_PUBLIC_URL=https://kalender.${local.domain_pg}",
+          "AGENDAV_TIMEZONE=Europe/Brussels",
+          "AGENDAV_LANG=nl",
+          "AGENDAV_LOG_DIR=/tmp/",
+          "AGENDAV_WEEKSTART=1"
+        ]
+      }
     }
   }
 
