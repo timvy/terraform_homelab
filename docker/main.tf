@@ -5,6 +5,7 @@ resource "docker_network" "networks" {
   provider = docker.hosts[split(".", each.key)[0]]
   name     = split(".", each.key)[1]
   driver   = lookup(each.value, "driver", "bridge")
+  internal = lookup(each.value, "internal", false)
 
   dynamic "ipam_config" {
     for_each = lookup(each.value, "ipam_config", null) != null ? [lookup(each.value, "ipam_config", null)] : []

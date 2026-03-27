@@ -49,7 +49,9 @@ locals {
 
     hetzner = {
       pangolin = {}
-      baikal   = {}
+      baikal = {
+        internal = true
+      }
     }
   }
 
