@@ -49,6 +49,7 @@ locals {
 
     hetzner = {
       pangolin = {}
+      baikal   = {}
     }
   }
 
@@ -747,7 +748,10 @@ locals {
       traefik = {
         image   = "traefik:latest"
         restart = "unless-stopped"
-        network = [docker_network.networks["hetzner.pangolin"].name]
+        network = [
+          docker_network.networks["hetzner.pangolin"].name,
+          docker_network.networks["hetzner.baikal"].name
+          ]
         ports = {
           http = {
             internal = 80
@@ -781,6 +785,19 @@ locals {
           }
         }
       }
+      baikal = {
+        image   = "ckulka/baikal:nginx"
+        restart = "unless-stopped"
+        network = [docker_network.networks["hetzner.baikal"].name]
+        volumes = {
+          baikal_config = {
+            container_path = "/var/www/baikal/config"
+          }
+          baikal_specific = {
+            container_path = "/var/www/baikal/Specific"
+          }
+        }
+      }      
     }
   }
 
