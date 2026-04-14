@@ -736,7 +736,7 @@ locals {
     }
     hetzner = {
       pangolin = {
-        image   = "fosrl/pangolin:1.16.2"
+        image   = "fosrl/pangolin:1.17.1"
         restart = "unless-stopped"
         network = [docker_network.networks["hetzner.pangolin"].name]
         mounts = {
