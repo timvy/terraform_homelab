@@ -47,9 +47,6 @@ locals {
     home = {
       common_name = "*.${local.domain_home}"
     }
-    nextcloud = {
-      common_name = "nextcloud.${local.domain_home}"
-    }
   }
 }
 
