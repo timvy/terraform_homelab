@@ -17,7 +17,6 @@ locals {
   # Define networks per host
   docker_networks = {
     lxc-docker3 = {
-      authentik    = {}
       healthchecks = {}
       download     = {}
       hedgedoc     = {}
@@ -58,10 +57,6 @@ locals {
   # Define secrets per host
   docker_secrets = {
     lxc-docker3 = {
-      authentik_db_pwd = {}
-      authentik_secret = {
-        length = 64
-      }
       firefly_db_root_pwd = {}
       firefly_db_pwd      = {}
       firefly_app_key = {
@@ -94,66 +89,6 @@ locals {
   # Define containers per host (static configuration only)
   docker_containers = {
     lxc-docker3 = {
-      authentik_db = {
-        image                  = "postgres:15-alpine"
-        restart                = "unless-stopped"
-        network                = [docker_network.networks["lxc-docker3.authentik"].name]
-        docker_traefik_enabled = false
-        env = [
-          "POSTGRES_USER=authentik",
-          "POSTGRES_PASSWORD=${random_password.this["lxc-docker3.authentik_db_pwd"].result}",
-          "POSTGRES_DB=authentik"
-        ]
-        volumes = {
-          authentik_db = {
-            container_path = "/var/lib/postgresql/data"
-          }
-        }
-      }
-      authentik = {
-        image   = "ghcr.io/goauthentik/server:latest"
-        restart = "unless-stopped"
-        network = [docker_network.networks["lxc-docker3.authentik"].name]
-        env = [
-          "AUTHENTIK_POSTGRESQL__HOST=authentik_db",
-          "AUTHENTIK_POSTGRESQL__NAME=authentik",
-          "AUTHENTIK_POSTGRESQL__PASSWORD=${random_password.this["lxc-docker3.authentik_db_pwd"].result}",
-          "AUTHENTIK_POSTGRESQL__USER=authentik",
-          "AUTHENTIK_REDIS__HOST=authentik_redis",
-          "AUTHENTIK_SECRET_KEY=${random_password.this["lxc-docker3.authentik_secret"].result}",
-        ]
-        command = [
-          "server"
-        ]
-      }
-      authentik_redis = {
-        image                  = "redis:7-alpine"
-        restart                = "unless-stopped"
-        network                = [docker_network.networks["lxc-docker3.authentik"].name]
-        docker_traefik_enabled = false
-        volumes = {
-          authentik_redis = {
-            container_path = "/data"
-          }
-        }
-      }
-      authentik_worker = {
-        image                  = "ghcr.io/goauthentik/server:latest"
-        restart                = "unless-stopped"
-        network                = [docker_network.networks["lxc-docker3.authentik"].name]
-        docker_traefik_enabled = false
-        env = [
-          "AUTHENTIK_POSTGRESQL__HOST=authentik_db",
-          "AUTHENTIK_POSTGRESQL__NAME=authentik",
-          "AUTHENTIK_POSTGRESQL__PASSWORD=${random_password.this["lxc-docker3.authentik_db_pwd"].result}",
-          "AUTHENTIK_POSTGRESQL__USER=authentik",
-          "AUTHENTIK_REDIS__HOST=authentik_redis",
-          "AUTHENTIK_SECRET_KEY=${random_password.this["lxc-docker3.authentik_secret"].result}",
-        ]
-        command = [
-          "worker"
-        ]
-      }
       firefly = {
         image   = "fireflyiii/core:latest"
         network = [docker_network.networks["lxc-docker3.firefly"].name]
@@ -699,49 +634,6 @@ locals {
             target = "/media/videos"
           }
         }
-      }
-      tsdproxy = {
-        image = "almeidapaulopt/tsdproxy:2"
-        network = [
-          for network_name in keys(local.docker_networks.lxc-docker3) :
-          docker_network.networks["lxc-docker3.${network_name}"].name
-        ]
-        volumes = {
-          tsdproxy_data = {
-            container_path = "/data"
-          }
-          tsdproxy_config = {
-            container_path = "/config"
-          }
-        }
-        mounts = {
-          docker_sock = {
-            source    = "/var/run/docker.sock"
-            target    = "/var/run/docker.sock"
-            type      = "bind"
-            read_only = true
-          }
-        }
-        hosts = {
-          gateway = {
-            host = "host.docker.internal"
-            ip   = "host-gateway"
-          }
-        }
-        uploads = merge(
-          {
-            tsdproxy_config = {
-              content_base64 = base64encode(local.tsdproxy_config)
-              file           = "/config/tsdproxy.yaml"
-            }
-          },
-          {
-            for k, v in local.tsdproxy_lists : "tsdproxy_${k}" => {
-              content_base64 = base64encode(v)
-              file           = "/config/${k}.yaml"
-            }
-          }
-        )
       }
     }
     hetzner = {
