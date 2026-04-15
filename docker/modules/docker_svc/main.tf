@@ -107,5 +107,16 @@ resource "docker_container" "this" {
       permissions    = devices.value.permissions
     }
   }
-  command = var.docker_command != null ? var.docker_command : null
+  command     = var.docker_command != null ? var.docker_command : null
+  log_driver  = var.splunk_logging != null ? "splunk" : null
+  log_opts = var.splunk_logging != null ? merge(
+    {
+      "splunk-token" = var.splunk_logging.token
+      "splunk-url"   = var.splunk_logging.url
+      "mode"         = "non-blocking"
+    },
+    var.splunk_logging.index != null ? { "splunk-index" = var.splunk_logging.index } : {},
+    var.splunk_logging.sourcetype != null ? { "splunk-sourcetype" = var.splunk_logging.sourcetype } : {},
+    var.splunk_logging.source != null ? { "splunk-source" = var.splunk_logging.source } : {},
+  ) : null
 }

@@ -796,6 +796,9 @@ locals {
             type   = "bind"
           }
         }
+        splunk_logging = {
+          token = "e2bf65bd-5778-48cd-80bf-e5d7b185a4ee"
+        }        
       }
       baikal = {
         image   = "ckulka/baikal:nginx"

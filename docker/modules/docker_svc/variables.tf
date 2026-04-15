@@ -92,3 +92,14 @@ variable "devices" {
 variable "hosts" {
   default = null
 }
+
+variable "splunk_logging" {
+  default = null
+  type = object({
+    token      = string
+    url        = optional(string)
+    index      = optional(string)
+    sourcetype = optional(string)
+    source     = optional(string)
+  })
+}

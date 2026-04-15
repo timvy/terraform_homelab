@@ -109,4 +109,8 @@ module "docker_containers" {
   docker_labels               = lookup(each.value, "labels", {})
   docker_command              = lookup(each.value, "command", null)
   uploads                     = lookup(each.value, "uploads", null)
+  splunk_logging = lookup(each.value, "splunk_logging", null) != null ? merge(
+    lookup(each.value, "splunk_logging"),
+    { url = coalesce(lookup(lookup(each.value, "splunk_logging", {}), "url", null), "http://cribl.${local.domain_tailscale}:8088") }
+  ) : null
 }
