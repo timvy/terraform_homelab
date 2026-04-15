@@ -491,6 +491,10 @@ locals {
           for network_name in keys(local.docker_networks.lxc-docker3) :
           docker_network.networks["lxc-docker3.${network_name}"].name
         ]
+        env = [
+          "HETZNER_API_TOKEN=${data.bitwarden_secret.imported_secrets["hetzner_dns_api_traefik"].value}",
+          "HETZNER_PROPAGATION_TIMEOUT=300",
+        ]
         docker_traefik_enabled = false
         ports = {
           traefik_http = {
@@ -525,21 +529,27 @@ locals {
               file           = "/etc/traefik/traefik.yml"
             }
           },
-          {
-            for cert in local.flattened_certificates : "${cert.name}.${cert.file}" => {
-              content = cert.content
-              file    = "/etc/traefik/ssl/${cert.name}.${cert.file}"
-            }
-          }
+          # {
+          #   for cert in local.flattened_certificates : "${cert.name}.${cert.file}" => {
+          #     content = cert.content
+          #     file    = "/etc/traefik/ssl/${cert.name}.${cert.file}"
+          #   }
+          # }
         )
         volumes = {
           traefik_config = {
             container_path = "/etc/traefik"
           }
+          letsencrypt = {
+            container_path = "/letsencrypt"
+          }
         }
         command = [
           "--configFile=/etc/traefik/traefik.yml"
         ]
+        splunk_logging = {
+          token = "e2bf65bd-5778-48cd-80bf-e5d7b185a4ee"
+        }        
       }
       hishtory = {
         image   = "lscr.io/linuxserver/hishtory-server:latest"

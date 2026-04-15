@@ -1,7 +1,12 @@
 locals {
 
   traefik_static_config = yamlencode({
-    accessLog = {}
+    log: {
+      format = "json"
+    }
+    accessLog = {
+      format = "json"
+    }
     providers = {
       file = {
         directory = "/etc/traefik/dynamic"
@@ -14,23 +19,35 @@ locals {
       }
       https = {
         address = ":443"
+        http = {
+          tls = {
+            certResolver = "letsencrypt"
+            domains = [
+              {
+                main = "*.${local.domain_home}"
+                sans = [local.domain_home]
+              }
+            ]
+          }
+        }
       }
     }
+    certificatesResolvers = {
+      letsencrypt = {
+        acme = {
+          dnsChallenge = {
+            provider  = "hetzner"
+            resolvers = ["1.1.1.1:53", "8.8.8.8:53"]
+          }
+          email     = "info@${local.domain_home}"
+          storage   = "/letsencrypt/acme.json"
+          caServer  = "https://acme-v02.api.letsencrypt.org/directory"
+        }
+      }
+    } 
   })
 
   traefik_dynamic_config = yamlencode({
-    tls = {
-      certificates = [
-        {
-          certFile = "/etc/traefik/ssl/home.fullchain.pem"
-          keyFile  = "/etc/traefik/ssl/home.privkey.pem"
-        },
-        {
-          certFile = "/etc/traefik/ssl/ts.fullchain.pem"
-          keyFile  = "/etc/traefik/ssl/ts.privkey.pem"
-        }
-      ]
-    }
     http = {
       routers = {
         nextcloud = {
