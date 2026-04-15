@@ -5,11 +5,11 @@ locals {
   # Define Docker hosts (static only - no dynamic values)
   docker_hosts = {
     lxc-docker3 = {
-      host     = "ssh://ansible@lxc-docker3.internal:22"
+      host     = "ssh://ansible@lxc-docker3:22"
       ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no", "-o", "IdentityFile=~/.ssh/semaphore_homelab.key"]
     }
     hetzner = {
-      host     = "ssh://ansible@hetzner.internal:22"
+      host     = "ssh://ansible@hetzner:22"
       ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no", "-o", "IdentityFile=~/.ssh/semaphore_homelab.key"]
     }
   }
@@ -81,7 +81,7 @@ locals {
   }
 
   imported_secrets = [
-    "hetzner_api_token",
+    "hetzner_dns_api_traefik",
     "firefly-api-importer",
     "ENABLE_BANKING_APP_ID",
     "ENABLE_BANKING_PRIVATE_KEY"
@@ -668,7 +668,7 @@ locals {
         }
         command = ["--configFile=/etc/traefik/traefik_config.yml"]
         env = [
-          "HETZNER_API_TOKEN=${data.bitwarden_secret.imported_secrets["hetzner_api_token"].value}"
+          "HETZNER_API_TOKEN=${data.bitwarden_secret.imported_secrets["hetzner_dns_api_traefik"].value}"
         ]
         mounts = {
           traefik_config = {

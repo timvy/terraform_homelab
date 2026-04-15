@@ -42,39 +42,6 @@ resource "bitwarden_secret" "this" {
   note       = "Generated password for ${each.key}"
 }
 
-locals {
-  domains = {
-    home = {
-      common_name = "*.${local.domain_home}"
-    }
-  }
-}
-
-data "bitwarden_secret" "certificates" {
-  for_each = merge(
-    { for domain, config in local.domains : "${domain}_fullchain" => { key = "certificate_${config.common_name}_fullchain" } },
-    { for domain, config in local.domains : "${domain}_privkey" => { key = "certificate_${config.common_name}_privkey" } }
-  )
-
-  key = each.value.key
-}
-
-locals {
-  flattened_certificates = flatten([
-    for domain, config in local.domains : [
-      {
-        name    = domain
-        file    = "fullchain.pem"
-        content = data.bitwarden_secret.certificates["${domain}_fullchain"].value
-      },
-      {
-        name    = domain
-        file    = "privkey.pem"
-        content = data.bitwarden_secret.certificates["${domain}_privkey"].value
-      }
-    ]
-  ])
-}
 
 data "bitwarden_secret" "imported_secrets" {
   for_each = toset(local.imported_secrets)
