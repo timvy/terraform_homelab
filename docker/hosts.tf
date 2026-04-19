@@ -350,6 +350,13 @@ locals {
             target = "/tv"
           }
         }
+        devices = [
+          {
+            path_on_host       = "/dev/dri"
+            path_in_container  = "/dev/dri"
+            cgroup_permissions = "rwm"
+          }
+        ]
         lsio_mods_tailscale_enabled = true
         lsio_mods_tailscale_vars = {
           tailscale_serve_port = 8096
@@ -484,7 +491,7 @@ locals {
         ]
         splunk_logging = {
           token = "e2bf65bd-5778-48cd-80bf-e5d7b185a4ee"
-        }        
+        }
       }
       hishtory = {
         image   = "lscr.io/linuxserver/hishtory-server:latest"
@@ -655,7 +662,7 @@ locals {
         network = [
           docker_network.networks["hetzner.pangolin"].name,
           docker_network.networks["hetzner.baikal"].name
-          ]
+        ]
         ports = {
           http = {
             internal = 80
@@ -690,7 +697,7 @@ locals {
         }
         splunk_logging = {
           token = "e2bf65bd-5778-48cd-80bf-e5d7b185a4ee"
-        }        
+        }
       }
       baikal = {
         image   = "ckulka/baikal:nginx"
