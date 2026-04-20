@@ -64,7 +64,7 @@ module "docker_containers" {
   # Container configuration
   image                       = each.value.image
   docker_network_name         = each.value.network
-  devices                     = lookup(each.value, "devices", [])
+  devices                     = lookup(each.value, "devices", null)
   docker_env_variables        = lookup(each.value, "env", [])
   docker_volumes              = lookup(each.value, "volumes", {})
   docker_mounts               = lookup(each.value, "mounts", {})
