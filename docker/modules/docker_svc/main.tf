@@ -100,7 +100,7 @@ resource "docker_container" "this" {
     }
   }
   dynamic "devices" {
-    for_each = var.devices != null ? var.devices : {}
+    for_each = var.devices != null ? var.devices : []
     content {
       host_path      = devices.value.host_path
       container_path = devices.value.container_path

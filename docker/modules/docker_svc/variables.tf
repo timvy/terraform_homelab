@@ -87,6 +87,11 @@ variable "uploads" {
 
 variable "devices" {
   default = null
+  type = list(object({
+    host_path      = string
+    container_path = string
+    permissions    = optional(string)
+  }))
 }
 
 variable "hosts" {
