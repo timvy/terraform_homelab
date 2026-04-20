@@ -6,11 +6,11 @@ locals {
   docker_hosts = {
     lxc-docker3 = {
       host     = "ssh://ansible@lxc-docker3:22"
-      ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no", "-o", "IdentityFile=~/.ssh/semaphore_homelab.key"]
+      ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no"]
     }
     hetzner = {
       host     = "ssh://ansible@hetzner:22"
-      ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no", "-o", "IdentityFile=~/.ssh/semaphore_homelab.key"]
+      ssh_opts = ["-o", "ControlMaster=auto", "-o", "ControlPath=~/.ssh/control-%C", "-o", "ControlPersist=yes", "-o", "StrictHostKeyChecking=no"]
     }
   }
 
