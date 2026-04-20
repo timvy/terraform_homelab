@@ -257,56 +257,6 @@ locals {
           }
         }
       }
-      bazarr = {
-        image   = "lscr.io/linuxserver/bazarr:latest"
-        network = [docker_network.networks["lxc-docker3.download"].name]
-        env = [
-          "TZ=Europe/Brussels",
-          "PUID=1000",
-          "PGID=1000",
-        ]
-        mounts = {
-          config = {
-            source = "/mnt/bindmounts/bazarr_config"
-            target = "/config"
-          }
-          downloads = {
-            source = "/media/downloads"
-            target = "/downloads"
-          }
-          movies = {
-            source = "/media/videos/hdmovies"
-            target = "/movies"
-          }
-          series = {
-            source = "/media/videos/series"
-            target = "/tv/series"
-          }
-        }
-      }
-      lidarr = {
-        image   = "lscr.io/linuxserver/lidarr:latest"
-        network = [docker_network.networks["lxc-docker3.download"].name]
-        env = [
-          "TZ=Europe/Brussels",
-          "PUID=1000",
-          "PGID=1000",
-        ]
-        mounts = {
-          config = {
-            source = "/mnt/bindmounts/lidarr_config"
-            target = "/config"
-          }
-          downloads = {
-            source = "/media/downloads"
-            target = "/downloads"
-          }
-          movies = {
-            source = "/media/music"
-            target = "/music"
-          }
-        }
-      }
       pinchflat = {
         image   = "ghcr.io/kieraneglin/pinchflat:latest"
         network = [docker_network.networks["lxc-docker3.download"].name]
