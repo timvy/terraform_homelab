@@ -302,9 +302,9 @@ locals {
         }
         devices = [
           {
-            path_on_host       = "/dev/dri"
-            path_in_container  = "/dev/dri"
-            cgroup_permissions = "rwm"
+            host_path       = "/dev/dri"
+            container_path  = "/dev/dri"
+            permissions = "rwm"
           }
         ]
         lsio_mods_tailscale_enabled = true
