@@ -1,7 +1,7 @@
 locals {
 
   traefik_static_config = yamlencode({
-    log: {
+    log : {
       format = "json"
     }
     accessLog = {
@@ -39,12 +39,12 @@ locals {
             provider  = "hetzner"
             resolvers = ["1.1.1.1:53", "8.8.8.8:53"]
           }
-          email     = "info@${local.domain_home}"
-          storage   = "/letsencrypt/acme.json"
-          caServer  = "https://acme-v02.api.letsencrypt.org/directory"
+          email    = "info@${local.domain_home}"
+          storage  = "/letsencrypt/acme.json"
+          caServer = "https://acme-v02.api.letsencrypt.org/directory"
         }
       }
-    } 
+    }
   })
 
   traefik_dynamic_config = yamlencode({
