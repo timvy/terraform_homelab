@@ -136,21 +136,6 @@ locals {
           }
         }
       }
-      healthchecks = {
-        image   = "lscr.io/linuxserver/healthchecks:latest"
-        network = [docker_network.networks["lxc-docker3.healthchecks"].name]
-        env     = local.env_healthchecks
-        volumes = {
-          healthchecks = {
-            container_path = "/config"
-          }
-        }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 8000
-          tailscale_hostname   = "hc"
-        }
-      }
       hedge = {
         image   = "lscr.io/linuxserver/hedgedoc:latest"
         network = [docker_network.networks["lxc-docker3.hedgedoc"].name]
@@ -352,30 +337,6 @@ locals {
         image   = "ghcr.io/flaresolverr/flaresolverr:latest"
         restart = "unless-stopped"
         network = [docker_network.networks["lxc-docker3.download"].name]
-      }
-      portainer = {
-        image   = "portainer/portainer-ce:latest"
-        restart = "unless-stopped"
-        network = [docker_network.networks["lxc-docker3.portainer"].name]
-        volumes = {
-          portainer_data = {
-            container_path = "/data"
-          }
-        }
-        mounts = {
-          docker_sock = {
-            source    = "/var/run/docker.sock"
-            target    = "/var/run/docker.sock"
-            type      = "bind"
-            read_only = true
-          }
-        }
-        labels = {
-          traefik_port = {
-            label = "traefik.http.services.portainer.loadbalancer.server.port"
-            value = "9443"
-          }
-        }
       }
       traefik = {
         image = "traefik:latest"
