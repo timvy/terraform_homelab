@@ -17,9 +17,7 @@ locals {
   # Define networks per host
   docker_networks = {
     lxc-docker3 = {
-      healthchecks = {}
       download     = {}
-      hedgedoc     = {}
       jellyfin     = {}
       kuma         = {}
       samba        = {}
@@ -65,8 +63,6 @@ locals {
       firefly_import_secret = {
         length = 32
       }
-      hedge_session_pwd   = {}
-      pad_admin_password  = {}
       wallabag_env_secret = {}
       samba_user_tim = {
         length = 32
@@ -136,51 +132,6 @@ locals {
           }
         }
       }
-      hedge = {
-        image   = "lscr.io/linuxserver/hedgedoc:latest"
-        network = [docker_network.networks["lxc-docker3.hedgedoc"].name]
-        env = [
-          "TZ=Europe/Brussels",
-          "PUID=1000",
-          "PGID=1000",
-          "HD_DATABASE_NAME=/config/hedgedoc.db",
-          "HD_DATABASE_TYPE=sqlite",
-          "CMD_DOMAIN=doc.${local.domain_pg}",
-          "CMD_EMAIL=true",
-          "CMD_ALLOW_EMAIL_REGISTER=true",
-          "CMD_ALLOW_ORIGIN=localhost,hedgedoc.${local.domain_tailscale},doc.${local.domain_pg}",
-          "CMD_SESSION_SECRET=${random_password.this["lxc-docker3.hedge_session_pwd"].result}"
-        ]
-        volumes = {
-          hedge = {
-            container_path = "/config"
-          }
-        }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 3000
-          tailscale_hostname   = "hedgedoc"
-        }
-      }
-      # pad = {
-      #   image   = "etherpad/etherpad:latest"
-      #   network = [docker_network.networks["lxc-docker3.hedgedoc"].name]
-      #   env = [
-      #     "NODE_ENV=production",
-      #     "ETHERPAD_ADMIN_PASSWORD=${random_password.this["lxc-docker3.pad_admin_password"].result}",
-      #     "DB_TYPE=sqlite",
-      #     "DB_SQLITE_FILE=/opt/etherpad-lite/var/etherpad.sq3"
-
-      #   ]
-      #   volumes = {
-      #     data = {
-      #       container_path = "/opt/etherpad-lite/var"
-      #     }
-      #     modules = {
-      #       container_path = "/opt/etherpad-lite/node_modules"
-      #     }
-      #   }
-      # }
       radarr = {
         image   = "lscr.io/linuxserver/radarr:latest"
         network = [docker_network.networks["lxc-docker3.download"].name]
@@ -313,25 +264,6 @@ locals {
       ittools = {
         image   = "sharevb/it-tools:latest"
         network = [docker_network.networks["lxc-docker3.web"].name]
-      }
-      rss = {
-        image   = "lscr.io/linuxserver/freshrss:latest"
-        network = [docker_network.networks["lxc-docker3.download"].name]
-        env = [
-          "TZ=Europe/Brussels",
-          "PUID=1000",
-          "PGID=1000",
-        ]
-        volumes = {
-          freshrss_config = {
-            container_path = "/config"
-          }
-        }
-        lsio_mods_tailscale_enabled = true
-        lsio_mods_tailscale_vars = {
-          tailscale_serve_port = 80
-          tailscale_hostname   = "rss"
-        }
       }
       flaresolverr = {
         image   = "ghcr.io/flaresolverr/flaresolverr:latest"
