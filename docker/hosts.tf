@@ -71,6 +71,9 @@ locals {
         length = 32
       }
       traefik_admin_user = {}
+      freedium_admin_key = {
+        length = 32
+      }
     }
 
     hetzner = {}
@@ -482,6 +485,39 @@ locals {
           media = {
             source = "/media/videos"
             target = "/media/videos"
+          }
+        }
+      }
+      # ts-files = {
+      #   image   = "tailscale/tailscale:latestœ"
+      #   network = [docker_network.networks["lxc-docker3.web"].name]
+      #   mounts = {
+      #     media = {
+      #       source = "/media/videos"
+      #       target = "/media/videos"
+      #     }
+      #   }
+      #   volumes = {
+      #     tailscale_config = {
+      #       container_path = "/config/tailscale"
+      #     }
+      #   env = [
+      #     "TS_STATE_DIR=/config/tailscale"
+      #   ]          
+      # }
+      freedium = {
+        image   = "ghcr.io/freedium-cfd/web:latest"
+        network = [docker_network.networks["lxc-docker3.web"].name]
+        env = [
+          # "HOST_ADDRESS=https://freedium.${local.domain_home}",
+          # "TIMEOUT=15",
+          # "ADMIN_SECRET_KEY=${random_password.this["lxc-docker3.freedium_admin_key"].result}",
+          # "PROXY_LIST=",
+        ]
+        labels = {
+          port = {
+            label = "traefik.http.services.freedium.loadbalancer.server.port"
+            value = "7080"
           }
         }
       }
